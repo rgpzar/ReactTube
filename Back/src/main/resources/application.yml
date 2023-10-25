@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ReactTubeBackend
+  datasource:
+    url: jdbc:mysql://localhost:3306/airport_api
+    username: root
+    password: spring
+  jpa:
+    hibernate:
+      ddl-auto: update
+  web:
+    cors:
+      allowed-origins: http://localhost:5173
+
+server:
+  port: 8080
+
+security:
+  jwt:
+    expiration_minutes: 30
+    secret_key: whisperpiasdufgboadfvbouaeybdfipausdfioyugwasdfijauosdcyfvaosdyfg
+
+
