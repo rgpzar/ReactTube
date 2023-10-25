@@ -1,0 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
+
+section{
+    margin: 0px auto;
+
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+
+    width: 60%;
+
+    font-family: 'Cabins';
+}
+
+

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
+
+section{
+    padding-top: 65px;
+
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.link{
+    color: lightblue;
+    text-decoration: underline;
+    cursor: pointer;
+}
+.link:visited{
+    color: rgb(255, 61, 61);
+}
+
+h2{
+    border-bottom: 1px solid #e9442b;
+    font-weight: 400;
+    font-family: "Cabin";
+}
+
+h1{
+    font-family: 'Cabins';
+    font-size: 2.4em;
+}
+
+p{
+    font-size: 1em;
+}
