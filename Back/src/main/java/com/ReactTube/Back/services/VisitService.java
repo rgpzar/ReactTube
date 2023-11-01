@@ -1,5 +1,7 @@
 package com.ReactTube.Back.services;
 
+import com.ReactTube.Back.errorHandling.customExceptions.NoUserAuthorizedException;
+import com.ReactTube.Back.errorHandling.customExceptions.VisitNotFoundException;
 import com.ReactTube.Back.models.CompositeKeys.UserVideoPK;
 import com.ReactTube.Back.models.User;
 import com.ReactTube.Back.models.Video;
@@ -27,20 +29,17 @@ public class VisitService {
     @Autowired
     private VideoRepo videoRepo;
 
+    @Autowired
+    private AuthenticationService authenticationService;
+
     public Set<Visit> getVisitsByVideoId(long videoId){
         return visitRepo.findByIdVideoId(videoId);
     }
 
-    public void addVisit(Video video){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    public void addVisit(Video video) throws NoUserAuthorizedException {
+        User user = authenticationService.getCurrentAuthenticatedUser();
 
-        if(auth != null){
-            User user = userRepo.findByUsername(auth.getName()).orElse(null); //throw UserNotFoundException -> Self-made
-
-            assert user != null;
-            assert video != null;
-            manageVisit(user.getId(), video.getId());
-        }
+        manageVisit(user.getId(), video.getId());
     }
 
     private void manageVisit(long userId, long videoId){
@@ -77,21 +76,14 @@ public class VisitService {
         }
     }
 
-    public Visit updateLike(long videoId, Boolean like){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepo.findByUsername(auth.getName()).orElse(null);
-        /*TO DO: Replace the previous 2 lines of code by a new method to get the current authenticated user (AuthenticationService)*/
+    public Visit updateLike(long videoId, Boolean like) throws NoUserAuthorizedException {
+        User user = authenticationService.getCurrentAuthenticatedUser();
 
         Optional<Visit> visitOptional = visitRepo.findByUseridAndVideoId(user.getId(), videoId);
+        Visit visit = visitOptional.orElseThrow(() -> new VisitNotFoundException("Visit couldn't be found"));
+        visit.setUserLike(like);
 
-        if(visitOptional.isPresent()){
-            Visit visit = visitOptional.get();
-            visit.setUserLike(like);
-
-            //persist
-            return visitRepo.save(visit);
-        }//else throw new VisitNotFoundException()
-
-        return null;
+        //persist
+        return visitRepo.save(visit);//else throw new VisitNotFoundException()
     }
 }

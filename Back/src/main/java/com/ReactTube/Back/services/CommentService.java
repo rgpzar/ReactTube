@@ -1,5 +1,8 @@
 package com.ReactTube.Back.services;
 
+import com.ReactTube.Back.errorHandling.customExceptions.NoUserAuthorizedException;
+import com.ReactTube.Back.errorHandling.customExceptions.ResourceNotFoundException;
+import com.ReactTube.Back.errorHandling.customExceptions.VideoNotFoundException;
 import com.ReactTube.Back.models.Comment;
 import com.ReactTube.Back.models.CompositeKeys.UserVideoPK;
 import com.ReactTube.Back.models.User;
@@ -26,26 +29,25 @@ public class CommentService {
     @Autowired
     private UserRepo userRepo;
 
-    public Comment addComment(long videoId, String commentString){
-        Video video = videoRepo.findById(videoId).orElse(null); //throw VideoNotFoundException -> Self-made
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    @Autowired
+    private AuthenticationService authenticationService;
 
-        if(auth != null){
-            User user = userRepo.findByUsername(auth.getName()).orElse(null); //throw UserNotFoundException -> Self-made
-            UserVideoPK commentId = new UserVideoPK();
-            Comment newComment = new Comment();
+    public Comment addComment(long videoId, String commentString) throws NoUserAuthorizedException {
+        Video video = videoRepo.findById(videoId)
+            .orElseThrow(() -> new VideoNotFoundException("Video couldn't be found"));
+        User user = authenticationService.getCurrentAuthenticatedUser();
 
-            commentId.setVideoId(video.getId());
-            commentId.setUserId(user.getId());
-            commentId.setTime(new Date());
+        UserVideoPK commentId = new UserVideoPK();
+        Comment newComment = new Comment();
 
-            newComment.setId(commentId);
-            newComment.setComment(commentString);
+        commentId.setVideoId(video.getId());
+        commentId.setUserId(user.getId());
+        commentId.setTime(new Date());
 
-            return commentRepo.save(newComment);
-        }
+        newComment.setId(commentId);
+        newComment.setComment(commentString);
 
-        return null;
+        return commentRepo.save(newComment);
     }
 
     public List<Comment> getCommentByVideoId(long videoId){

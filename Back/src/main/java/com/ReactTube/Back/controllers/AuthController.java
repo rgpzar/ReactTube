@@ -38,22 +38,4 @@ public class AuthController {
 
         return ResponseEntity.ok(jwt);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, String>> handleGenericException(Exception exception, HttpServletRequest request){
-
-        Map<String, String> apiError = new HashMap<>();
-        apiError.put("message",exception.getLocalizedMessage());
-        apiError.put("timestamp", new Date().toString());
-        apiError.put("url", request.getRequestURL().toString());
-        apiError.put("http-method", request.getMethod());
-
-        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-
-        if(exception instanceof AccessDeniedException){
-            status = HttpStatus.FORBIDDEN;
-        }
-
-        return ResponseEntity.status(status).body(apiError);
-    }
 }

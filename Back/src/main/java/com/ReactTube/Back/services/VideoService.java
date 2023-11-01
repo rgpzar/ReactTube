@@ -1,6 +1,8 @@
 package com.ReactTube.Back.services;
 
 import com.ReactTube.Back.dto.VideoDto;
+import com.ReactTube.Back.errorHandling.customExceptions.NoUserAuthorizedException;
+import com.ReactTube.Back.errorHandling.customExceptions.VideoNotFoundException;
 import com.ReactTube.Back.models.Comment;
 import com.ReactTube.Back.models.Video;
 import com.ReactTube.Back.models.Visit;
@@ -26,8 +28,9 @@ public class VideoService {
         return (ArrayList<Video>) videoRepo.findAll();
     }
 
-    public VideoDto getVideoById(long id){
-        Video video = videoRepo.findById(id).orElse(null); //throw VideoNotFoundException -> Self-made
+    public VideoDto getVideoById(long id) throws NoUserAuthorizedException {
+        Video video = videoRepo.findById(id)
+                .orElseThrow(() -> new VideoNotFoundException("Video couldn't be found."));
         List<Comment> comments = commentService.getCommentByVideoId(id);
         Set<Visit> visits = visitService.getVisitsByVideoId(id);
 

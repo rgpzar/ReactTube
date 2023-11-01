@@ -2,6 +2,7 @@ package com.ReactTube.Back.controllers;
 
 
 import com.ReactTube.Back.dto.VideoDto;
+import com.ReactTube.Back.errorHandling.customExceptions.NoUserAuthorizedException;
 import com.ReactTube.Back.models.Comment;
 import com.ReactTube.Back.models.Video;
 import com.ReactTube.Back.models.Visit;
@@ -31,7 +32,7 @@ public class VideoController {
     }
 
     @GetMapping("/{id}")
-    public VideoDto getVideoById(@PathVariable("id") long id){
+    public VideoDto getVideoById(@PathVariable("id") long id) throws NoUserAuthorizedException {
         return videoService.getVideoById(id);
     }
 
@@ -46,12 +47,12 @@ public class VideoController {
     }
 
     @PostMapping("/{id}/addComment")
-    public Comment addCommment(@PathVariable("id") long videoId, @RequestBody String comment){
+    public Comment addCommment(@PathVariable("id") long videoId, @RequestBody String comment) throws NoUserAuthorizedException {
         return commentService.addComment(videoId, comment);
     }
 
     @PutMapping("/{id}/like")
-    public Visit updateLike(@PathVariable("id") long videoId, @RequestParam Boolean like){
+    public Visit updateLike(@PathVariable("id") long videoId, @RequestParam Boolean like) throws NoUserAuthorizedException {
         return visitService.updateLike(videoId, like);
     }
 }
