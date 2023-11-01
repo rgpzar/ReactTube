@@ -1,5 +1,6 @@
 package com.ReactTube.Back.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
     private long id;
+
+    @ManyToMany(mappedBy = "visit")
+    @JsonIgnore
+    private Set<Video> videoVisits;
+
+    @ManyToMany(mappedBy = "comment")
+    @JsonIgnore
+    private List<Video> videosCommented;
 
     @Column(nullable = false)
     private String username;

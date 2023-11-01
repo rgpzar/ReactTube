@@ -57,8 +57,10 @@ public class SecurityConfig {
                     authConfig.requestMatchers(HttpMethod.POST, "/auth/login").permitAll();
                     authConfig.requestMatchers("/error").permitAll();
 
-                    authConfig.requestMatchers(HttpMethod.GET, "/airport/*").permitAll();
-                    authConfig.requestMatchers(HttpMethod.GET, "/airport").permitAll();
+                    authConfig.requestMatchers(HttpMethod.POST, "/video/*/addComment").permitAll();
+                    authConfig.requestMatchers(HttpMethod.PUT, "/video/*/like").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/video/*").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/video").permitAll();
                     authConfig.requestMatchers(HttpMethod.POST, "user").permitAll();
 
 
