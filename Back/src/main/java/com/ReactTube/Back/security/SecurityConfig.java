@@ -1,8 +1,10 @@
 package com.ReactTube.Back.security;
 
 import com.ReactTube.Back.security.filters.JwtAuthenticationFilter;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
@@ -28,6 +31,7 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+
 
 
     @Bean
@@ -70,8 +74,13 @@ public class SecurityConfig {
                     authConfig.requestMatchers(HttpMethod.PUT,  "/airport/*").hasAuthority("ROLE_ ADMIN");
                     authConfig.requestMatchers(HttpMethod.DELETE,  "/airport/*").hasAuthority("ROLE_ ADMIN");
 
-
                     authConfig.anyRequest().denyAll();
+                })
+                .exceptionHandling(exceptionHandler -> {
+                    exceptionHandler.authenticationEntryPoint(((request, response, authException) -> {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.getWriter().write("401: Authentication failed. Please check your credentials.");
+                    }));
                 });
 
 

@@ -8,13 +8,17 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.MySQLDialect
   web:
     cors:
       allowed-origins: http://localhost:5173
 
 server:
   port: 8080
+  error:
+    include-message: never
+    include-stacktrace: never
+    include-exception: true
 
 security:
   jwt:
