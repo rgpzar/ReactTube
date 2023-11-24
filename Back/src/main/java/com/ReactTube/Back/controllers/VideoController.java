@@ -7,6 +7,7 @@ import com.ReactTube.Back.models.Comment;
 import com.ReactTube.Back.models.Video;
 import com.ReactTube.Back.models.Visit;
 import com.ReactTube.Back.services.CommentService;
+import com.ReactTube.Back.services.StreamService;
 import com.ReactTube.Back.services.VideoService;
 import com.ReactTube.Back.services.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class VideoController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private StreamService streamService;
+
     @GetMapping()
     public ArrayList<Video> getAllVideos(){
         return videoService.getAllVideos();
@@ -33,6 +37,14 @@ public class VideoController {
 
     @GetMapping("/{id}")
     public VideoDto getVideoById(@PathVariable("id") long id) throws NoUserAuthorizedException {
+        return videoService.getVideoById(id);
+    }
+
+    /*TO DO:
+    *    - Make a Mono Webflux type return in order to send the video to the front
+    */
+    @GetMapping("{id}/watch")
+    public VideoDto watchVideo(@PathVariable("id") long id) throws NoUserAuthorizedException {
         return videoService.getVideoById(id);
     }
 

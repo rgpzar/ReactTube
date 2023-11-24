@@ -32,8 +32,6 @@ public class Video {
     @JsonIgnore
     private List<User> comment;
 
-    @Column(unique = true, nullable = false)
-    private String source;
 
     @Column(nullable = false)
     private String title;
@@ -49,14 +47,6 @@ public class Video {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
     }
 
     public String getTitle() {
