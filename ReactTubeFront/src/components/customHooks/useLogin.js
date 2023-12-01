@@ -1,6 +1,13 @@
 /* eslint-disable no-case-declarations */
 import { configureStore } from "@reduxjs/toolkit";
 import { actions } from "./actions";
+import { jwtDecode } from "jwt-decode";
+
+
+const saveSession = (jwt, user) => {
+    localStorage.setItem('jwt', 'Bearer ' + jwt);
+    localStorage.setItem("user", user);
+};
 
 const loginReducer = (state  = getStoredSession(), action) => {
     switch(action.type){
@@ -20,10 +27,16 @@ const loginReducer = (state  = getStoredSession(), action) => {
 
         case actions.STORE_NEW_SESSION:
             console.log(action.payload);
-            let jwt = action.payload.jwt,
-            user = action.payload.user;
 
+
+            let jwt = action.payload.jwt;
+            let decodedJwt = jwtDecode(jwt);
+            let user = JSON.stringify({
+                decodedJwt
+            });
+            
             saveSession(jwt, user);
+            
             return {
                 jwt: jwt,
                 user: user
@@ -41,10 +54,6 @@ const getStoredSession = () => {
       };
 }
 
-const saveSession = (jwt, user) => {
-    localStorage.setItem('jwt', 'Bearer ' + jwt);
-    localStorage.setItem('user', JSON.stringify(user));
-  };
 
 
 export const useLogin = () => {

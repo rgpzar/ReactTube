@@ -43,7 +43,7 @@ export const Dashboard = () => {
                         Email: {user.email}
                     </li>
                     <li>
-                        Api Key: {user.apiKey}
+                        IP: {user.ip}
                     </li>
                     <li>
                         Example route: <Link className={styles.link} to={"http://localhost:8080/airport?api_key=" + user.apiKey}>Get all airports</Link> 
