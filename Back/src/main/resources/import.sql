@@ -1,0 +1,1 @@
+INSERT INTO USER VALUES(DEFAULT, "Guest", "Guest", "USER", "Guest");

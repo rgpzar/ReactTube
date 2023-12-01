@@ -26,4 +26,6 @@ security:
     expiration_minutes: 30
     secret_key: whisperpiasdufgboadfvbouaeybdfipausdfioyugwasdfijauosdcyfvaosdyfg
 
-
+stream_conf:
+  visit:
+    max_minutes_between_visits: 2
