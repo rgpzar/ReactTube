@@ -1,9 +1,9 @@
-package com.ReactTube.backApplication.services;
+package com.ReactTube.backApplication.errorHandling.customExceptions;
 
 
 public class VideoAlreadyExistsException extends RuntimeException {
-        VideoAlreadyExistsException(String s) {
-                super(s);
+        public VideoAlreadyExistsException(String message) {
+                super(message);
         }
 }
 

@@ -22,7 +22,6 @@ public class AuthController {
     private final AuthenticationService authService;
     @PreAuthorize("permitAll")
     @PostMapping("/login")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Validated AuthenticationRequest authRequest, HttpServletRequest request) {
         AuthenticationResponse jwt = null;
         try{

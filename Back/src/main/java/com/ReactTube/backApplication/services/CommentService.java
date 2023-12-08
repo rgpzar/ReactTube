@@ -11,20 +11,28 @@ import com.ReactTube.backApplication.repositories.VideoRepo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 
 @Service
-@Builder
-@Data
-@AllArgsConstructor
 public class CommentService {
     private final CommentRepo commentRepo;
     private final VideoRepo videoRepo;
     private final AuthenticationService authenticationService;
 
+
+    public CommentService(
+            @Autowired CommentRepo commentRepo,
+            @Autowired VideoRepo videoRepo,
+            @Autowired AuthenticationService authenticationService
+    ) {
+        this.commentRepo = commentRepo;
+        this.videoRepo = videoRepo;
+        this.authenticationService = authenticationService;
+    }
 
     public Comment addComment(long videoId, String commentString) throws NoUserAuthorizedException {
         Video video = videoRepo.findById(videoId)

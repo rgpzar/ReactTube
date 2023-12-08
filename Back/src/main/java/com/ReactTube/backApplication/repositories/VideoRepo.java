@@ -4,4 +4,5 @@ import com.ReactTube.backApplication.models.Video;
 import org.springframework.data.repository.CrudRepository;
 
 public interface VideoRepo extends CrudRepository<Video, Long> {
+    public Boolean existsByTitle(String title);
 }

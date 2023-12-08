@@ -16,21 +16,17 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/user")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@Builder
-@Data
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @GetMapping()
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public List<User> getUsers(){
         return userService.getUsers();
     }
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @GetMapping("/search")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Boolean userExistsByEmail(@RequestParam String email){
         return userService.userExistsByEmail(email);
     }
@@ -41,27 +37,23 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @GetMapping(path = "/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Optional<User> getUserById(@PathVariable("id") Long id){
         return userService.getUserById(id);
     }
 
     @PostMapping()
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public User saveUser(@RequestBody User user){
         return userService.saveUser(user);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @PutMapping(path = "/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public User updateUser(@RequestBody UserDto userDto, @PathVariable("id") Long id) throws NoUserAuthorizedException {
         return userService.updateUser(userDto, id);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @DeleteMapping(path = "/{id}")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Boolean deleteUser(@PathVariable("id") Long id){
         return userService.deleteUser(id);
     }

@@ -37,7 +37,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("POST"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         config.setAllowedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -65,9 +65,13 @@ public class SecurityConfig {
                     authConfig.requestMatchers(HttpMethod.GET, "/video").permitAll();
                     authConfig.requestMatchers(HttpMethod.GET, "/video/*").permitAll();
                     authConfig.requestMatchers(HttpMethod.GET, "/video/watch/*").permitAll();
-                        //  - PRIVATE (Authenticated user functions)
+                    authConfig.requestMatchers(HttpMethod.GET, "/video/getVideoThumbnail/*").permitAll();
+
+                    //  - PRIVATE (Authenticated user functions)
                     authConfig.requestMatchers(HttpMethod.POST, "/video/*/addComment").authenticated();
                     authConfig.requestMatchers(HttpMethod.PUT, "/video/*/like").authenticated();
+                    authConfig.requestMatchers(HttpMethod.POST, "/video/upload").authenticated();
+                    authConfig.requestMatchers(HttpMethod.DELETE, "/video/*").authenticated();
 
                     //USER SETTINGS ENDDPOINTS
                     authConfig.requestMatchers(HttpMethod.GET, "/setting/info").authenticated();
@@ -76,7 +80,7 @@ public class SecurityConfig {
 
                     //ADMIN ENDPOINTS
                     authConfig.requestMatchers("/user/*").hasAuthority("ROLE_ ADMIN");
-                    authConfig.requestMatchers(HttpMethod.POST,  "/user/*").hasAuthority("ROLE_ ADMIN");
+                    authConfig.requestMatchers(HttpMethod.POST,  "/user").permitAll();
                     authConfig.requestMatchers(HttpMethod.PUT,  "/user/*").hasAuthority("ROLE_ ADMIN");
                     authConfig.requestMatchers(HttpMethod.DELETE,  "/user/*").hasAuthority("ROLE_ ADMIN");
 

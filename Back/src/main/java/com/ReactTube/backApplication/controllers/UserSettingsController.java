@@ -1,6 +1,5 @@
 package com.ReactTube.backApplication.controllers;
 
-import com.ReactTube.backApplication.dto.AuthenticationRequest;
 import com.ReactTube.backApplication.dto.UpdatedUserResponseDto;
 import com.ReactTube.backApplication.dto.UserDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
@@ -13,16 +12,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/setting/")
-@Builder
 @AllArgsConstructor
-@Data
 public class UserSettingsController {
     private final UserService userService;
     private final AuthenticationService authenticationService;

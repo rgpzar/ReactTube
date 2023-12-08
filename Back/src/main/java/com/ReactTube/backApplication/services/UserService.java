@@ -2,6 +2,7 @@ package com.ReactTube.backApplication.services;
 
 import com.ReactTube.backApplication.dto.UserDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
+import com.ReactTube.backApplication.errorHandling.customExceptions.ResourceNotFoundException;
 import com.ReactTube.backApplication.mappers.UserUpdateMapper;
 import com.ReactTube.backApplication.models.User;
 import com.ReactTube.backApplication.repositories.UserRepo;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,12 +19,17 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Builder
-@Data
-@AllArgsConstructor
 public class UserService {
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
+
+    public UserService(
+            @Autowired UserRepo userRepo,
+            @Autowired PasswordEncoder passwordEncoder
+    ) {
+        this.userRepo = userRepo;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public List<User> getUsers(){
         return userRepo.findAll();
@@ -30,6 +37,11 @@ public class UserService {
 
     public Optional<User> getUserById(Long id){
         return userRepo.findById(id);
+    }
+
+    public User getUserByUsername(String username){
+        return userRepo.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     public User getAnonymousUser() throws NoUserAuthorizedException {

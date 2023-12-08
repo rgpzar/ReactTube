@@ -12,7 +12,9 @@ import com.ReactTube.backApplication.repositories.VisitRepo;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -34,9 +36,9 @@ public class VisitService {
 
     public VisitService(
             @Value("${stream_conf.visit.max_minutes_between_visits}") int MAX_MINUTES_BETWEEN_VISITS,
-            VisitRepo visitRepo,
-            AuthenticationService authenticationService,
-            UserService userService)
+            @Autowired VisitRepo visitRepo,
+            @Autowired AuthenticationService authenticationService,
+            @Autowired UserService userService)
         {
         this.MAX_MINUTES_BETWEEN_VISITS = MAX_MINUTES_BETWEEN_VISITS;
         this.visitRepo = visitRepo;
@@ -55,7 +57,7 @@ public class VisitService {
             visitor = authenticationService.getCurrentAuthenticatedUser();
 
             System.out.printf("Username: %s visited the video with id: %d %n", visitor .getUsername(), video.getId());
-        }catch (NoUserAuthorizedException e){
+        }catch (AuthenticationCredentialsNotFoundException e){
             visitor = userService.getAnonymousUser();
 
             System.out.println("Anonymous visit to the video with id: " + video.getId());
@@ -91,21 +93,20 @@ public class VisitService {
              *
              * */
             Visit visit = visitOptional.get();
-            Visit newVisit = visit;
             visitRepo.delete(visit);
 
            UserVideoPK newVisitPK =  new UserVideoPK();
 
-           newVisitPK.setUserId(newVisit.getId().getUserId());
-           newVisitPK.setVideoId(newVisit.getId().getVideoId());
+           newVisitPK.setUserId(visit.getId().getUserId());
+           newVisitPK.setVideoId(visit.getId().getVideoId());
            newVisitPK.setTime(new Date());
 
             int timesVisited = visit.getTimesVisited();
-            newVisit.setTimesVisited(timesVisited + 1);
-            newVisit.setId(newVisitPK);
+            visit.setTimesVisited(timesVisited + 1);
+            visit.setId(newVisitPK);
 
 
-            visitRepo.save(newVisit);
+            visitRepo.save(visit);
         }else{
             /*
              * Insert the first visit for this user and video id's

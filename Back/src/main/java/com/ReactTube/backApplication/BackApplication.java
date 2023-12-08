@@ -1,5 +1,6 @@
 package com.ReactTube.backApplication;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,7 +13,11 @@ public class BackApplication implements CommandLineRunner {
 	private final InitialDataLoader dataLoader;
 	private final PasswordEncoder passwordEncoder;
 
-	BackApplication(InitialDataLoader dataLoader, PasswordEncoder passwordEncoder){
+	BackApplication(
+			@Autowired InitialDataLoader dataLoader,
+			@Autowired PasswordEncoder passwordEncoder
+	)
+	{
 		this.dataLoader = dataLoader;
 		this.passwordEncoder = passwordEncoder;
 	}
@@ -24,7 +29,8 @@ public class BackApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		dataLoader.insertInitialData();
+		dataLoader.loadUserList();
+		//dataLoader.loadVideoList();
 		System.out.println(passwordEncoder.encode("Test123"));
 	}
 }

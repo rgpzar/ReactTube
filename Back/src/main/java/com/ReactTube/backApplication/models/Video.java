@@ -45,11 +45,14 @@ public class Video {
     @JsonIgnore
     private User uploadedBy;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String title;
 
     @Column(nullable = false)
     private String uploadDate;
 
     private String description;
+
+    @Column(nullable = false)
+    private double durationInSeconds;
 }

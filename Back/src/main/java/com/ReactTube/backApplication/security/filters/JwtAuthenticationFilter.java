@@ -1,4 +1,5 @@
 package com.ReactTube.backApplication.security.filters;
+
 import com.ReactTube.backApplication.models.User;
 import com.ReactTube.backApplication.repositories.UserRepo;
 import com.ReactTube.backApplication.services.JwtService;
@@ -8,16 +9,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 @Builder
@@ -45,21 +44,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String username = jwtService.extractUsername(jwt);
 
         //Settear un objeto Authentication (Usuario autenticado) en el SecurityContext
-        User user = userRepo.findByUsername(username).get();
+        User user = userRepo.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-          username, null, user.getAuthorities()
+                username, null, user.getAuthorities()
         );
 
         SecurityContextHolder.getContext().setAuthentication(authToken);
 
         filterChain.doFilter(request, response);
-    }
-
-    private static Optional<String> getJwtFromRequest(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)) {
-            return Optional.of(bearerToken.substring(7));
-        }
-        return Optional.empty();
     }
 }

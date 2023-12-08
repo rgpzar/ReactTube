@@ -4,6 +4,7 @@ import com.ReactTube.backApplication.errorHandling.customExceptions.*;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.security.SignatureException;
 import org.apache.catalina.connector.ClientAbortException;
+import org.apache.catalina.connector.Response;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import java.io.FileNotFoundException;
 
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -59,6 +62,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         String message = "Bad request to the endpoint";
 
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(FileNotFoundException.class)
+    public ResponseEntity<String> handleFileNotFoundException(FileNotFoundException ex, WebRequest request){
+        String message = "Status 404: File not found";
+
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)

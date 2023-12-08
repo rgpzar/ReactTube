@@ -32,5 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
-### Video files ###
+### Video and image files ###
 *.mp4
+*.png
