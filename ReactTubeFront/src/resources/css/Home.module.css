@@ -6,6 +6,8 @@ section{
     display: flex;
     flex-flow: column nowrap;
     align-items: center;
+    width: 100%;
+    height: 100%;
 }
 
 .link{

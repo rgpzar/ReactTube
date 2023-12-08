@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
 
-section{
+section.main_section{
     margin: 0px auto;
 
     display: flex;
@@ -10,13 +10,5 @@ section{
     width: 60%;
 
     font-family: 'Cabins';
-}
-
-.link{
-    color: lightblue;
-    text-decoration: underline;
-    cursor: pointer;
-}
-.link:visited{
-    color: rgb(255, 61, 61);
+    padding-top: 5vh;
 }

@@ -1,37 +1,31 @@
-import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector} from "react-redux";
 
-import { useDispatch, useSelector } from "react-redux";
-
-import { useEffect } from "react";
+import { useEffect} from "react";
 import { actions } from "../customHooks/actions";
 
 import Header from "../../widgets/Header";
-import { getJwt, getUser } from "../customHooks/useLogin";
-
-import styles from '../../resources/css/Dashboard.module.css'
+import { getJwt, getUser} from "../customHooks/useLogin";
 
 export const Dashboard = () => {
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const current = "dashboard";
 
-    dispatch({ type: actions.CHECK_STORAGE });
+    
 
-    const jwt = useSelector(getJwt) || null;
-    const user = useSelector(getUser) || null;
-
-
-    //console.log(jwt, user);
+    const jwt =  useSelector(getJwt);
+    const user = useSelector(getUser);
 
 
     useEffect(() => {
-        if (!jwt) {
-            navigate("/auth");
+    
+        if(!jwt || !user){
+            dispatch({ type: actions.CHECK_STORAGE });
         }
+
     });
 
-    return (
+    
+    if(user && jwt) return (
         <>
             <Header current={current} />
             <section>
@@ -43,10 +37,7 @@ export const Dashboard = () => {
                         Email: {user.email}
                     </li>
                     <li>
-                        IP: {user.ip}
-                    </li>
-                    <li>
-                        Example route: <Link className={styles.link} to={"http://localhost:8080/airport?api_key=" + user.apiKey}>Get all airports</Link> 
+                        IP: {user.ipAddr}
                     </li>
                 </ul>
             </section>

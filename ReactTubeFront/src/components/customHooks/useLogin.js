@@ -5,10 +5,12 @@ import { jwtDecode } from "jwt-decode";
 
 
 const saveSession = (jwt, user) => {
-    localStorage.setItem('jwt', 'Bearer ' + jwt);
-    localStorage.setItem("user", user);
-};
+    const expirationTime = new Date();
+    expirationTime.setTime(expirationTime.getTime() + 30 * 60 * 1000); // 30 minutes
 
+    document.cookie = `jwt=Bearer ${jwt}; expires=${expirationTime.toUTCString()}; path=/`;
+    document.cookie = `user=${JSON.stringify(user)}; expires=${expirationTime.toUTCString()}; path=/`;
+};
 const loginReducer = (state  = getStoredSession(), action) => {
     switch(action.type){
         case actions.CHECK_STORAGE:
@@ -26,16 +28,18 @@ const loginReducer = (state  = getStoredSession(), action) => {
             }
 
         case actions.STORE_NEW_SESSION:
-            console.log(action.payload);
 
 
             let jwt = action.payload.jwt;
+            console.log(jwt);
             let decodedJwt = jwtDecode(jwt);
-            let user = JSON.stringify({
-                decodedJwt
-            });
+            let user = {
+                ...decodedJwt
+            };
             
             saveSession(jwt, user);
+
+            console.log(user);
             
             return {
                 jwt: jwt,
@@ -45,13 +49,16 @@ const loginReducer = (state  = getStoredSession(), action) => {
 }
 
 const getStoredSession = () => {
-    const storedJwt = localStorage.getItem("jwt"); 
-    const storedUser = JSON.parse(localStorage.getItem("user"));
+    const jwtCookie = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+    const userCookie = document.cookie.split('; ').find(row => row.startsWith('user='));
 
-      return {
-        jwt: storedJwt,
-        user: storedUser
-      };
+    const jwt = jwtCookie ? jwtCookie.split('=')[1] : null;
+    const user = userCookie ? JSON.parse(userCookie.split('=')[1]) : null;
+
+    return {
+        jwt,
+        user
+    };
 }
 
 
@@ -63,12 +70,16 @@ export const useLogin = () => {
 }
 
 export const getJwt = (state) => {
+    if(state)
     return state.jwt;
 }
 
 export const getUser = (state) => {
+    if(state)
     return state.user;
 }
+
+
 
 
 

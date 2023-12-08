@@ -10,7 +10,7 @@ export const Login = ({ handleLogin, authError }) => {
     } = useForm();
 
     return(
-        <div className={`${styles.formContainer} ${styles.signInContainer}`}>
+        <div className={`${styles.formContainer} ${styles.signInContainer}`} id='login'>
                     <form onSubmit={handleSubmit((data) => handleLogin(data))} method="POST">
                         <h1>Log in</h1>
                         {errors.username && <p className={styles.formError}>{errors.username.message}</p>}
