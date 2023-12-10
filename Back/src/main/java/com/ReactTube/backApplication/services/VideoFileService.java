@@ -89,9 +89,9 @@ public class VideoFileService {
 
         Path path = Paths.get(resource.getURI().getPath().substring(1) + title + ".mp4");
 
+        Files.write(path, videoBytes);
 
         generateVideoThumbnail(new File(path.toString()), title);
-        Files.write(path, videoBytes);
     }
 
     public void generateVideoThumbnail(File file, String title){
