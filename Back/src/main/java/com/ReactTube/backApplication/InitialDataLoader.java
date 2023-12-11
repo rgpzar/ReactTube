@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -46,32 +47,32 @@ public class InitialDataLoader {
             Video.builder()
                     .title("untitled2")
                     .description("Music Video 1")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build(),
             Video.builder()
                     .title("FornitePerverso")
                     .description("Music Video 2")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build(),
             Video.builder()
                     .title("hyper")
                     .description("Music Video 3")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build(),
             Video.builder()
                     .title("90's SNS")
                     .description("Music Video 4")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build(),
             Video.builder()
                     .title("RapSinCorte-I")
                     .description("Music Video 5")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build()/*,
             Video.builder()
                     .title("Project_CRB")
                     .description("Music Video 6")
-                    .uploadDate("1/12/2023")
+                    .uploadDate(new Date())
                     .build()*/
     );
 

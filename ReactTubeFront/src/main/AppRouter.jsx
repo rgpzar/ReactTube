@@ -6,6 +6,7 @@ import NotAuthorized from "../components/routes/NotAuthorized";
 import { LogOut } from "../components/routes/LogOut";
 import Documentation from "../components/routes/Documentation";
 import Authenticate from "../components/routes/Authenticate";
+import UploadVideoForm from "../components/routes/UploadVideoForm";
 
 export const AppRouter = () => {
 
@@ -19,6 +20,7 @@ export const AppRouter = () => {
                 <Route path='/forbidden' Component={() => <NotAuthorized/>}/>
                 <Route path="/logout" Component={() => <LogOut/>}/>
                 <Route path="/docs" Component={() => <Documentation/>} />
+                <Route path="/uploadVideo" Component={() => <UploadVideoForm/>}/>
                 <Route exact path="/" Component={() => <Authenticate/>}/>
             </Routes>
             

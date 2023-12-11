@@ -17,9 +17,9 @@ export const Header = ({ current, setSearchTerm }) => {
                     </svg>
                 </Link>
             </div>
-            <div>
-                <Search setSearchTerm={setSearchTerm}/>
-            </div>
+
+            <Search setSearchTerm={setSearchTerm}/>
+
             <nav>
                 <ul>
                     <li className={current === "home" ? styles.selected : ""}>

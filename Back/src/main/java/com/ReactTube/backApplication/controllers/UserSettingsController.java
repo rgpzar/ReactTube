@@ -27,9 +27,10 @@ public class UserSettingsController {
 
     @GetMapping(path = "/info")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public Optional<User> info() throws NoUserAuthorizedException {
-        long id = authenticationService.getCurrentAuthenticatedUser().getId();
-        return userService.getUserById(id);
+    public Optional<UserDto> info() throws NoUserAuthorizedException {
+        return Optional.ofNullable(
+                UserUpdateMapper.INSTANCE.userDtoFromUser(authenticationService.getCurrentAuthenticatedUser()
+        ));
     }
 
     @PutMapping(path = "/update")

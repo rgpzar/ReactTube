@@ -44,7 +44,7 @@ export const Home = () => {
                     setVideoList(data);
                 })
                 .catch(e => {
-                    navigate("/");
+                    navigate("/logout");
                     console.log(e);
                 })
     }, [jwt, navigate, searchTerm, dispatch, user]);

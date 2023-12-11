@@ -19,4 +19,8 @@ public interface UserUpdateMapper {
 
     UploadedByDto uploadedByDtoFromUser(User user);
     User userFromUploadedByDto(UploadedByDto uploadedByDto);
+
+    User userFromUserDto(UserDto userDto);
+
+    UserDto userDtoFromUser(User user);
 }

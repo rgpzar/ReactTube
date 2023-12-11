@@ -9,6 +9,8 @@ import com.ReactTube.backApplication.models.Visit;
 import com.ReactTube.backApplication.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
@@ -17,8 +19,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
-
-import static javax.xml.transform.OutputKeys.MEDIA_TYPE;
 
 @RestController
 @RequestMapping("/video")
@@ -69,7 +69,7 @@ public class VideoController {
     }
 
     @PostMapping("/upload")
-    public String uploadVideo(
+    public ResponseEntity<String> uploadVideo(
             @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
             @RequestParam("description") String description
@@ -89,18 +89,18 @@ public class VideoController {
                         .title(title)
                         .description(description)
                         .uploadedBy(currentUser)
-                        .uploadDate(formatter.format(new Date()))
+                        .uploadDate(new Date())
                         .durationInSeconds(videoFileService.getVideoDurationInSeconds(title))
                         .build();
                 videoService.saveVideo(video);
             }else {
-                return "Video already exists";
+                return new ResponseEntity<>("Video already exists", HttpStatus.CONFLICT);
             }
 
-            return "Video uploaded successfully";
+            return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
         } catch (Exception e){
             LOGGER.warning(e.getMessage());
-            return e.getMessage();
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -110,10 +110,6 @@ public class VideoController {
         return videoFileService.getVideoThumbnail(video.getTitle());
     }
 
-    @PostMapping()
-    public Boolean saveVideo(@RequestBody Video video){
-        return videoService.saveVideo(video);
-    }
 
     @DeleteMapping("/{id}")
     public Boolean deleteVideo(@PathVariable("id") long id) throws NoUserAuthorizedException {

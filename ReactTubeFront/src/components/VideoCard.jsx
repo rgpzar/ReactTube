@@ -1,20 +1,20 @@
 /* eslint-disable react/prop-types */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { getJwt } from "./customHooks/useLogin";
+import { useNavigate } from "react-router";
 
 import styles from "../resources/css/VideoCard.module.css";
+import { formatDistance } from "date-fns";
 
 const VideoCard = ({ videoDto }) => {
   const [img, setImg] = useState(null);
-
   const jwt = useSelector(getJwt);
+  const navigate = useNavigate();
 
   useEffect(() => { 
-    console.log(jwt.includes(" "));
-    console.log(jwt);
 
     jwt && fetch("http://localhost:8080/video/getVideoThumbnail/" + videoDto.video.id, {
       method: "GET",
@@ -25,6 +25,10 @@ const VideoCard = ({ videoDto }) => {
     }).then((response) => response.blob())
     .then((blob) => {
       setImg(URL.createObjectURL(blob));
+    })
+    .catch((error) => {
+      console.log(error);
+      navigate("/logout");
     });
   }, [videoDto, jwt]);
 
@@ -49,6 +53,22 @@ const VideoCard = ({ videoDto }) => {
     }
   };
 
+  const getUploadDateFormated = (uploadDate) => {
+
+
+    const from = new Date(uploadDate);
+    const to = new Date();
+
+    console.log(from);
+
+    const distance = formatDistance(from, to, {addSuffix: true});
+
+    const distanceArray = distance.split("");
+    distanceArray[0] = distanceArray[0].toUpperCase();
+
+    return distanceArray.join("");
+  };
+
   return (
     <div className={styles.card}>
       <div className={styles.card_header}>
@@ -58,15 +78,15 @@ const VideoCard = ({ videoDto }) => {
         <div className={styles.video_thumbnail}>
           <Link to={`http://localhost:8080/video/watch/${id}`}>
             <img src={img} alt="Video thumbnail"/>
+            <span>{durationFormatter(durationInSeconds)}</span>
           </Link>
         </div>
-        <p>Uploaded by: {uploadedBy.username}</p>
-        <p>Upload date: {uploadDate}</p>
-        <p>Duration: {durationFormatter(durationInSeconds)}</p>
-        <p>Visits: {
-          getVideoTotalVisits(videoVisits)
-        }
-        </p>
+          <p>
+            {uploadedBy.username} ‒ {getVideoTotalVisits(videoVisits)}  {(getVideoTotalVisits(videoVisits) > 1) || (getVideoTotalVisits(videoVisits) == 0)  ? 'visualizations' : 'visualization'}
+          </p>
+          <p>
+            {getUploadDateFormated(uploadDate)} ◷ 
+          </p>
       </div>
     </div>
   );

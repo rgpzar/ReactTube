@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -49,7 +50,7 @@ public class Video {
     private String title;
 
     @Column(nullable = false)
-    private String uploadDate;
+    private Date uploadDate;
 
     private String description;
 

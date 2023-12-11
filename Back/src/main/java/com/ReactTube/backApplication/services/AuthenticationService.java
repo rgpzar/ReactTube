@@ -48,6 +48,9 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authRequest, HttpServletRequest request) {
+        if(authRequest.getUsername() == null || authRequest.getPassword() == null || authRequest.getUsername().equals("Guest"))
+            throw new UsernameNotFoundException("The username or password is null.");
+
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             authRequest.getUsername(), authRequest.getPassword()
         );
