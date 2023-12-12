@@ -5,6 +5,7 @@ import { actions } from "../customHooks/actions";
 
 import Header from "../../widgets/Header";
 import { getJwt, getUser} from "../customHooks/useLogin";
+import UserSettingsForm from "../UserSettingsForm";
 
 export const Dashboard = () => {
     const dispatch = useDispatch();
@@ -25,24 +26,17 @@ export const Dashboard = () => {
     });
 
     
-    if(user && jwt) return (
+    return (
         <>
-            <Header current={current} />
-            <section>
-                <ul>
-                    <li>
-                        Username: {user.username}
-                    </li>
-                    <li>
-                        Email: {user.email}
-                    </li>
-                    <li>
-                        IP: {user.ipAddr}
-                    </li>
-                </ul>
-            </section>
+            <Header current={current}/>
+            <UserSettingsForm/>
         </>
-    )
+    );
+
+    
 }
+
+
+
 
 export default Dashboard;

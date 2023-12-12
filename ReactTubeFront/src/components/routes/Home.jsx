@@ -1,54 +1,59 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate} from "react-router-dom";
 import { actions } from "../customHooks/actions";
 import Header from "../../widgets/Header";
 import { getJwt, getUser } from "../customHooks/useLogin";
 import VideoWrapper from "../VideoWrapper";
+
 import styles from "../../resources/css/Home.module.css";
 
 
 export const Home = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
     const current = "home";
 
-    const jwt = useSelector(getJwt) || null;
-    const user = useSelector(getUser) || null;
+    const jwt = useSelector(getJwt);
+    const user = useSelector(getUser);
 
-    const [videoList, setVideoList] = useState(null);
+    const [videoList, setVideoList] = useState([]);
     const [searchTerm, setSearchTerm] = useState("");
 
-    console.log(jwt);
-
     useEffect(() => {
-
         if (!jwt || !user) {
             dispatch({ type: actions.CHECK_STORAGE });
         }
+    }, []);
 
+    useEffect(() => {
         const url = "http://localhost:8080/video";
 
-        fetch(url, {
-                method: "GET",
-                headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Authorization': jwt
-                }
-            })
-                .then(response => response.json())
-                .then(data => {
-                    data = data.filter(videoDto => {
-                        return videoDto.video.title.toLowerCase().includes(searchTerm.toLowerCase());
-                    });
-                    setVideoList(data);
-                })
-                .catch(e => {
-                    navigate("/logout");
-                    console.log(e);
-                })
-    }, [jwt, navigate, searchTerm, dispatch, user]);
+        const fetchVideos = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': jwt
+                    }
+                });
 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const videos = await response.json();
+                const filteredVideos = videos.filter(videoDto => 
+                    videoDto.video.title.toLowerCase().includes(searchTerm.toLowerCase())
+                );
+                setVideoList(filteredVideos);
+
+            } catch (error) {
+                console.error('There was a problem with the fetch operation:', error);
+                // Considera un mejor manejo de errores aquí
+            }
+        };
+
+        fetchVideos();
+    }, [jwt, searchTerm]);
 
     return (
         <>
@@ -57,7 +62,7 @@ export const Home = () => {
                 <VideoWrapper videoList={videoList} />
             </section>
         </>
-    )
-}
+    );
+};
 
-export default (Home);
+export default Home;

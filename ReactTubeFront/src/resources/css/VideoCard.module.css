@@ -80,7 +80,7 @@ div.video_thumbnail span{
 }
 
 div.card_body img:hover{
-    filter: blur(2px);
+    filter: brightness(70%);
 }
 
 div.card_body a{

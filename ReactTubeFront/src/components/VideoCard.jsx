@@ -14,22 +14,29 @@ const VideoCard = ({ videoDto }) => {
   const jwt = useSelector(getJwt);
   const navigate = useNavigate();
 
-  useEffect(() => { 
-
-    jwt && fetch("http://localhost:8080/video/getVideoThumbnail/" + videoDto.video.id, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: jwt,
-      }
-    }).then((response) => response.blob())
-    .then((blob) => {
-      setImg(URL.createObjectURL(blob));
-    })
-    .catch((error) => {
-      console.log(error);
-      navigate("/logout");
-    });
+  useEffect(() => {
+    if (jwt) {
+      fetch(`http://localhost:8080/video/getVideoThumbnail/${videoDto.video.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: jwt,
+        }
+      })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        setImg(URL.createObjectURL(blob));
+      })
+      .catch((error) => {
+        console.log(error);
+        // Considera mostrar un mensaje de error o una imagen de placeholder
+      });
+    }
   }, [videoDto, jwt]);
 
   const { id, title, uploadDate, durationInSeconds } = videoDto.video;
@@ -77,7 +84,7 @@ const VideoCard = ({ videoDto }) => {
       <div className={styles.card_body}>
         <div className={styles.video_thumbnail}>
           <Link to={`http://localhost:8080/video/watch/${id}`}>
-            <img src={img} alt="Video thumbnail"/>
+            {img && <img src={img} alt="Video thumbnail"/>}
             <span>{durationFormatter(durationInSeconds)}</span>
           </Link>
         </div>

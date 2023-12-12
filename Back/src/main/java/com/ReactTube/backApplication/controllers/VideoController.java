@@ -105,7 +105,7 @@ public class VideoController {
     }
 
     @GetMapping(value = "getVideoThumbnail/{id}", produces = "image/png")
-    public Mono<Resource> getVideoThumbnail(@PathVariable("id") long id) throws NoUserAuthorizedException {
+    public Mono<Resource> getVideoThumbnail(@PathVariable("id") long id)  {
         Video video = videoService.getVideoById(id);
         return videoFileService.getVideoThumbnail(video.getTitle());
     }

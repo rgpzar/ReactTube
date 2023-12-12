@@ -1,26 +1,14 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { getJwt, getUser } from '../customHooks/useLogin';
-import { useNavigate } from 'react-router';
+import { useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import Login from '../../widgets/Login';
 import Register from '../../widgets/Register';
 import register from '../helpers/register';
 import { getAuthSession } from '../helpers/login';
 import { actions } from '../customHooks/actions';
-import { useSelector } from 'react-redux';
 
-import styles from '../../resources/css/Authenticate.module.css'; // Importar los estilos CSS Modules
+import styles from '../../resources/css/Authenticate.module.css';
 
-/**
- * Authenticate component.
- * 
- * @returns {JSX.Element} The Authenticate component.
- */
-/**
- * Authenticate component.
- * 
- * @returns {JSX.Element} The Authenticate component.
- */
 const Authenticate = () => {
   const [rightPanelActive, setRightPanelActive] = useState(true);
   const [authError, setAuthError] = useState(null);
@@ -28,61 +16,54 @@ const Authenticate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  dispatch({ type: actions.CHECK_STORAGE });
-
-  const jwt = useSelector(getJwt);
-  const user = useSelector(getUser);
-
   useEffect(() => {
-    jwt && user && navigate('/home');
-  });
+    dispatch({ type: actions.CHECK_STORAGE });
+  }, [dispatch]);
 
-  /**
-   * Handles the screen transition between Login and Register in mobile phones.
-   */
+
   const handleScreenTransition = () => {
     setTransitionBtnText(prevText => prevText === "Login" ? "Register" : "Login");
   }
 
-  /**
-   * Handles the login process.
-   * 
-   * @param {Object} formData - The form data containing the username and password.
-   * @returns {Promise<void>} - A promise that resolves when the login process is complete.
-   */
   const handleLogin = async (formData) => {
-    const userDetails = {
-      username: formData.username,
-      password: formData.password
-    };
+    try {
+      const userDetails = {
+        username: formData.username,
+        password: formData.password,
+      };
 
-    const newSession = await getAuthSession(userDetails);
-
-    if (newSession) {
-      dispatch({ type: actions.STORE_NEW_SESSION, payload: newSession });
-      setAuthError(null);
-      navigate('/home');
-    } else {
-      setAuthError("Invalid username or password.");
+      const newSession = await getAuthSession(userDetails);
+      if (newSession) {
+        dispatch({ type: actions.STORE_NEW_SESSION, payload: newSession });
+        setAuthError(null);
+        navigate('/home');
+      } else {
+        setAuthError("Invalid username or password.");
+      }
+    } catch (error) {
+      setAuthError("An error occurred during login.");
     }
   };
 
-
-
   const handleRegister = async (formData) => {
-    const user = {
-      email: formData.email,
-      username: formData.username,
-      password: formData.password,
-      role: 'USER',
-    };
+    try {
+      const user = {
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+        role: 'USER',
+      };
 
-    const registeredUser = await register(user);
-    console.log(registeredUser);
-    const newJwt = await getAuthSession({ username: user.username, password: user.password });
-    console.log(newJwt)
-    dispatch({ type: actions.STORE_NEW_SESSION, payload: newJwt });
-    navigate('/home');
+      const registeredUser = await register(user);
+      console.log(registeredUser);
+      const newJwt = await getAuthSession({ username: user.username, password: user.password });
+      if (newJwt) {
+        dispatch({ type: actions.STORE_NEW_SESSION, payload: newJwt });
+        navigate('/home');
+      }
+    } catch (error) {
+      setAuthError("An error occurred during registration.");
+    }
   };
 
   return (
@@ -136,4 +117,3 @@ const Authenticate = () => {
 };
 
 export default Authenticate;
-

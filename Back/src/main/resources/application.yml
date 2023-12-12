@@ -21,9 +21,9 @@ server:
   port: 8080
   error:
     include-message: never
-    include-stacktrace: never
+    include-stacktrace: always
     include-exception: true
-    include-detail: never
+    include-detail: always
 
 security:
   jwt:
@@ -33,3 +33,15 @@ security:
 stream_conf:
   visit:
     max_minutes_between_visits: 1
+
+bucket4j:
+  filters:
+    - filter-method: servlet
+      cache-name: buckets
+      rate-limits:
+        - expression: "#request.remoteAddr"
+          bandwidths:
+            - capacity: 10
+              time: 1
+              unit: minutes
+

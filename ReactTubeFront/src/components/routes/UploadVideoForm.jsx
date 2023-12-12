@@ -28,16 +28,17 @@ const UploadVideoForm = () => {
 
 
         const formData = new FormData();
-        formData.append('file', data.file);
+        formData.append('file', data.file[0]);
         formData.append('title', data.title);
         formData.append('description', data.description);
+
+        console.log(formData);
 
         fetch('http://localhost:8080/video/upload', {
             method: 'POST',
             body: formData,
             headers:{
-                'Authorization': jwt,
-                'content-type': 'multipart/form-data'
+                'Authorization': jwt
             }
         })
             .then((response) => {
