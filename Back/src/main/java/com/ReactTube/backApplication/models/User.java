@@ -49,6 +49,14 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    //Personal information (not required to register)
+
+    private String firstName;
+
+    private String lastName;
+
+    private String phoneNumber;
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

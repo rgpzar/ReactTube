@@ -5,6 +5,7 @@ spring:
     url: jdbc:mysql://localhost:3306/react_tube
     username: root
     password: spring
+    max-active: 10
   jpa:
     hibernate:
       ddl-auto: update

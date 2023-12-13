@@ -66,6 +66,7 @@ public class SecurityConfig {
                     authConfig.requestMatchers(HttpMethod.GET, "/video/*").authenticated();
                     authConfig.requestMatchers(HttpMethod.GET, "/video/watch/*").permitAll();
                     authConfig.requestMatchers(HttpMethod.GET, "/video/getVideoThumbnail/*").permitAll();
+                    authConfig.requestMatchers(HttpMethod.GET, "/video/client/watch/*").authenticated();
                     authConfig.requestMatchers(HttpMethod.POST, "/video/*/addComment").authenticated();
                     authConfig.requestMatchers(HttpMethod.PUT, "/video/*/like").authenticated();
                     authConfig.requestMatchers(HttpMethod.POST, "/video/upload").authenticated();

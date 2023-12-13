@@ -1,13 +1,16 @@
 // Date: 2021/09/12
 import { useForm } from 'react-hook-form';
 import Header from '../../widgets/Header';
-import { useEffect, useState } from 'react';
+import { useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { getJwt } from '../customHooks/useLogin';
+import { getJwt } from '../customHooks/configureAppStore';
 import { actions } from '../customHooks/actions';
 import { useNavigate } from 'react-router';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+
+//Styles
+import styles from '../../resources/css/UploadVideo.module.css';
 
 const UploadVideoForm = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -67,7 +70,7 @@ const UploadVideoForm = () => {
         <>
             <Header current='UploadVideo'/>
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div>
+                <div className={styles.input_data}>
                     <label htmlFor="file">File:</label>
                     <input
                         type="file"
@@ -77,7 +80,7 @@ const UploadVideoForm = () => {
                     />
                     {errors.file && <span>This field is required</span>}
                 </div>
-                <div>
+                <div className={styles.input_data}>
                     <label htmlFor="title">Title:</label>
                     <input
                         type="text"
@@ -87,7 +90,7 @@ const UploadVideoForm = () => {
                     />
                     {errors.title && <span>This field is required</span>}
                 </div>
-                <div>
+                <div className={styles.input_data}>
                     <label htmlFor="description">Description:</label>
                     <textarea
                         id="description"

@@ -1,7 +1,8 @@
 package com.ReactTube.backApplication.controllers;
 
 import com.ReactTube.backApplication.dto.UpdatedUserResponseDto;
-import com.ReactTube.backApplication.dto.UserDto;
+import com.ReactTube.backApplication.dto.UserInputDto;
+import com.ReactTube.backApplication.dto.UserOutputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
 import com.ReactTube.backApplication.mappers.UserUpdateMapper;
 import com.ReactTube.backApplication.models.User;
@@ -10,8 +11,6 @@ import com.ReactTube.backApplication.services.JwtService;
 import com.ReactTube.backApplication.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,35 +32,37 @@ public class UserSettingsController {
 
     @GetMapping(path = "/info")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    public Optional<UserDto> info() throws NoUserAuthorizedException {
+    public Optional<UserOutputDto> info() throws NoUserAuthorizedException {
         return Optional.ofNullable(
-                UserUpdateMapper.INSTANCE.userDtoFromUser(authenticationService.getCurrentAuthenticatedUser()
+                UserUpdateMapper.INSTANCE.userOutputDtoFromUser(authenticationService.getCurrentAuthenticatedUser()
         ));
     }
 
     @PutMapping(path = "/update")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PreAuthorize("authenticated")
-    public UpdatedUserResponseDto updateUser(@RequestBody UserDto userDto, HttpServletRequest httpServletRequest) throws NoUserAuthorizedException {
+    public UpdatedUserResponseDto updateUser(@RequestBody UserInputDto userInputDto, HttpServletRequest httpServletRequest) throws NoUserAuthorizedException {
         User user = authenticationService.getCurrentAuthenticatedUser();
         String remoteAddress =  httpServletRequest.getRemoteAddr();
 
-        if(userDto.getPassword() == null || userDto.getPassword().equals("")){
+        if(userInputDto.getPassword() == null || userInputDto.getPassword().isEmpty()){
             throw new NoUserAuthorizedException("Password is null or empty");
         }
 
 
-        UserUpdateMapper.INSTANCE.updateUserFromDto(userDto, user);
+        UserUpdateMapper.INSTANCE.updateUserFromDto(userInputDto, user);
+
+        System.out.println(userInputDto);
 
         System.out.println(user);
 
         userService.saveUser(user);
 
         UpdatedUserResponseDto updatedUserResponse = UpdatedUserResponseDto.builder()
-                .user(user)
+                .userOutputDto(UserUpdateMapper.INSTANCE.userOutputDtoFromUser(user))
                 .build();
 
-        String password = userDto.getPassword();
+        String password = userInputDto.getPassword();
         User updatedUser = userService.getUserById(user.getId())
                 .orElseThrow(() -> new NoUserAuthorizedException("User not found (updating)"));
 

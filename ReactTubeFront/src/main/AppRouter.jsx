@@ -7,6 +7,7 @@ import { LogOut } from "../components/routes/LogOut";
 import Documentation from "../components/routes/Documentation";
 import Authenticate from "../components/routes/Authenticate";
 import UploadVideoForm from "../components/routes/UploadVideoForm";
+import VideoPage from "../components/routes/VideoPage";
 
 export const AppRouter = () => {
 
@@ -21,6 +22,7 @@ export const AppRouter = () => {
                 <Route path="/logout" Component={() => <LogOut/>}/>
                 <Route path="/docs" Component={() => <Documentation/>} />
                 <Route path="/uploadVideo" Component={() => <UploadVideoForm/>}/>
+                <Route path="watch/:id" Component={() => <VideoPage/>}/>
                 <Route exact path="/" Component={() => <Authenticate/>}/>
             </Routes>
             

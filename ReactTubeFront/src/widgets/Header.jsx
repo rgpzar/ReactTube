@@ -2,7 +2,6 @@
 import { Link } from "react-router-dom";
 import styles from '../resources/css/Header.module.css';
 
-import { FaPlay } from 'react-icons/fa';
 import Search from "../components/Search";
 
 export const Header = ({ current, setSearchTerm }) => {
@@ -27,9 +26,6 @@ export const Header = ({ current, setSearchTerm }) => {
                     </li>
                     <li className={current === "dashboard" ? styles.selected : ""}>
                         <Link to={"/dashboard"}>Dashboard</Link>
-                    </li>
-                    <li className={current === "docs" ? styles.selected : ""}>
-                        <Link to={"/docs"}>Documentation</Link>
                     </li>
                     <li>
                         <Link to={"/logout"}>Logout</Link>

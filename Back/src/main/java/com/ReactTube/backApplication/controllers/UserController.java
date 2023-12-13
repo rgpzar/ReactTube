@@ -1,12 +1,11 @@
 package com.ReactTube.backApplication.controllers;
 
-import com.ReactTube.backApplication.dto.UserDto;
+import com.ReactTube.backApplication.dto.UserInputDto;
+import com.ReactTube.backApplication.dto.UserOutputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
 import com.ReactTube.backApplication.models.User;
 import com.ReactTube.backApplication.services.UserService;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +47,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")
     @PutMapping(path = "/{id}")
-    public User updateUser(@RequestBody UserDto userDto, @PathVariable("id") Long id) throws NoUserAuthorizedException {
-        return userService.updateUser(userDto, id);
+    public User updateUser(@RequestBody UserInputDto userInputDto, @PathVariable("id") Long id) throws NoUserAuthorizedException {
+        return userService.updateUser(userInputDto, id);
     }
 
     @PreAuthorize("hasAuthority('ROLE_ ADMIN')")

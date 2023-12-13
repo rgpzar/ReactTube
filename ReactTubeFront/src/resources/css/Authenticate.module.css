@@ -313,6 +313,10 @@ input {
 	display: none;
 }
 
+.mobile_title {
+	display: none;
+}
+
 @media only screen and (max-width: 768px) {
 	* {
 		scroll-behavior: smooth;
@@ -320,7 +324,7 @@ input {
 
 	body {
 		height: 200vh !important;
-		overflow-y: hidden;
+		overflow-y: hidden !important;
 	}
 
 	#root {

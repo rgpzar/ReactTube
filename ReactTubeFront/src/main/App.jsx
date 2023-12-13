@@ -1,11 +1,11 @@
 import AppRouter from './AppRouter';
 
-import useLogin from '../components/customHooks/useLogin';
+import configureAppStore from '../components/customHooks/configureAppStore';
 import { Provider } from 'react-redux';
 
 function App() { 
 
-  const store = useLogin();
+  const store = configureAppStore();
   
 
   return (

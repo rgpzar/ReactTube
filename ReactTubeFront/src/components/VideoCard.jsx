@@ -1,10 +1,11 @@
 /* eslint-disable react/prop-types */
 
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import { getJwt } from "./customHooks/useLogin";
+import { getJwt } from "./customHooks/configureAppStore";
 import { useNavigate } from "react-router";
+import { actions } from "./customHooks/actions";
 
 import styles from "../resources/css/VideoCard.module.css";
 import { formatDistance } from "date-fns";
@@ -12,11 +13,19 @@ import { formatDistance } from "date-fns";
 const VideoCard = ({ videoDto }) => {
   const [img, setImg] = useState(null);
   const jwt = useSelector(getJwt);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (jwt) {
-      fetch(`http://localhost:8080/video/getVideoThumbnail/${videoDto.video.id}`, {
+    if (!jwt) {
+        dispatch({ type: actions.CHECK_STORAGE });
+    }
+  }, [jwt, dispatch]);
+
+
+  useEffect(() => {
+
+    jwt && fetch(`http://localhost:8080/video/getVideoThumbnail/${videoDto.video.id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +45,7 @@ const VideoCard = ({ videoDto }) => {
         console.log(error);
         // Considera mostrar un mensaje de error o una imagen de placeholder
       });
-    }
+
   }, [videoDto, jwt]);
 
   const { id, title, uploadDate, durationInSeconds } = videoDto.video;
@@ -83,7 +92,7 @@ const VideoCard = ({ videoDto }) => {
       </div>
       <div className={styles.card_body}>
         <div className={styles.video_thumbnail}>
-          <Link to={`http://localhost:8080/video/watch/${id}`}>
+          <Link to={`/watch/${id}`}>
             {img && <img src={img} alt="Video thumbnail"/>}
             <span>{durationFormatter(durationInSeconds)}</span>
           </Link>

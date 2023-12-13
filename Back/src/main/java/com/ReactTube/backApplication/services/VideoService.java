@@ -9,6 +9,8 @@ import com.ReactTube.backApplication.models.Comment;
 import com.ReactTube.backApplication.models.Video;
 import com.ReactTube.backApplication.models.Visit;
 import com.ReactTube.backApplication.repositories.VideoRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ public class VideoService {
     private final VideoRepo videoRepo;
     private final VisitService visitService;
     private final CommentService commentService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VideoService.class);
 
     public VideoService(
             @Autowired VideoRepo videoRepo,
@@ -73,7 +77,9 @@ public class VideoService {
     }
 
     public Boolean saveVideo(Video video){
-        if(existsByTitle(video.getTitle())){
+        boolean videoExists = existsByTitle(video.getTitle());
+
+        if(videoExists){
             throw new VideoAlreadyExistsException("Video already exists.");
         }
 
@@ -82,8 +88,10 @@ public class VideoService {
             videoRepo.save(video);
             return true;
         }catch (Exception e){
-            return false;
+            LOGGER.error(e.getMessage());
         }
+
+        return false;
     }
 
     public boolean deleteVideo(long videoId){

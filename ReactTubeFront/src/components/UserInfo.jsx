@@ -1,28 +1,21 @@
-import { useEffect, useState } from "react";
+/* eslint-disable react/prop-types */
+import { useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { actions } from "../customHooks/actions";
-import Header from "../../widgets/Header";
-import { getJwt, getUser } from "../customHooks/configureAppStore";
-import VideoWrapper from "../VideoWrapper";
+import { getJwt } from "./customHooks/configureAppStore";
+import { actions } from "./customHooks/actions";
+import VideoWrapper from "./VideoWrapper";
 
-import styles from "../../resources/css/Home.module.css";
-
-
-export const Home = () => {
+const UserInfo = ({userInfo}) => {
     const dispatch = useDispatch();
-    const current = "home";
 
     const jwt = useSelector(getJwt);
-    const user = useSelector(getUser);
-
     const [videoList, setVideoList] = useState([]);
-    const [searchTerm, setSearchTerm] = useState("");
 
     useEffect(() => {
-        if (!jwt || !user) {
-            dispatch({ type: actions.CHECK_STORAGE });
+        if(!jwt){
+            dispatch({type: actions.CHECK_STORAGE});
         }
-    }, []);
+    }, [jwt, dispatch]);
 
     useEffect(() => {
         const url = "http://localhost:8080/video";
@@ -41,8 +34,9 @@ export const Home = () => {
                 }
 
                 const videos = await response.json();
+                console.log(videos);
                 const filteredVideos = videos.filter(videoDto => 
-                    videoDto.video.title.toLowerCase().includes(searchTerm.toLowerCase())
+                    videoDto.uploadedBy.username == userInfo.username
                 );
                 setVideoList(filteredVideos);
 
@@ -52,17 +46,21 @@ export const Home = () => {
             }
         };
 
-        jwt && fetchVideos();
-    }, [jwt, searchTerm]);
+        fetchVideos();
+    }, [jwt, userInfo]);
 
     return (
         <>
-            <Header current={current} setSearchTerm={setSearchTerm}/>
-            <section>
-                <VideoWrapper videoList={videoList} />
-            </section>
+            <div className="userInfo">
+                <p>Username: {userInfo.username}</p>
+                <p>Email: {userInfo.email}</p>
+            </div>
+
+
+            {videoList.length > 0 && <h2>Videos uploaded by {userInfo.username}</h2>}
+            {videoList.length > 0 && <VideoWrapper videoList={videoList}/>}
         </>
     );
 };
 
-export default Home;
+export default UserInfo;

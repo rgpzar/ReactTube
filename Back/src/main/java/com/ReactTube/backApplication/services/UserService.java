@@ -1,20 +1,17 @@
 package com.ReactTube.backApplication.services;
 
-import com.ReactTube.backApplication.dto.UserDto;
+import com.ReactTube.backApplication.dto.UserInputDto;
+import com.ReactTube.backApplication.dto.UserOutputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
 import com.ReactTube.backApplication.errorHandling.customExceptions.ResourceNotFoundException;
 import com.ReactTube.backApplication.mappers.UserUpdateMapper;
 import com.ReactTube.backApplication.models.User;
 import com.ReactTube.backApplication.repositories.UserRepo;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,12 +75,12 @@ public class UserService {
         }
     }
 
-    public User updateUser(UserDto userDto, long id) throws NoUserAuthorizedException {
+    public User updateUser(UserInputDto userInputDto, long id) throws NoUserAuthorizedException {
         User user = getUserById(id).orElseThrow(
                 () -> new NoUserAuthorizedException("No user authorized")
         );
 
-        UserUpdateMapper.INSTANCE.updateUserFromDto(userDto, user);
+        UserUpdateMapper.INSTANCE.updateUserFromDto(userInputDto, user);
 
         return userRepo.save(user);
     }

@@ -25,7 +25,7 @@ header{
 }
 
 header > nav{
-    flex-basis: 40%;
+    flex-basis: 30%;
 }
 
 header > nav > ul{
@@ -33,7 +33,7 @@ header > nav > ul{
 
     flex-flow: row nowrap;
 
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
 
     width: 100%;

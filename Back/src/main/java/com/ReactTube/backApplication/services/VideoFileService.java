@@ -43,7 +43,6 @@ public class VideoFileService {
     }
 
     public Mono<Resource> getVideo(Video video) throws NoUserAuthorizedException {
-        visitService.addVisit(video);
         return Mono.fromSupplier(
                 () -> resourceLoader.getResource(String.format(FORMAT, video.getTitle()))
         );

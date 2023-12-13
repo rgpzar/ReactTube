@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch} from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Login from '../../widgets/Login';
@@ -16,9 +16,6 @@ const Authenticate = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch({ type: actions.CHECK_STORAGE });
-  }, [dispatch]);
 
 
   const handleScreenTransition = () => {

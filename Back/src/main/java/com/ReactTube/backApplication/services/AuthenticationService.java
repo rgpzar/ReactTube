@@ -71,6 +71,9 @@ public class AuthenticationService {
         extraClaims.put("email", user.getEmail());
         extraClaims.put("username", user.getUsername());
         extraClaims.put("ipAddr", ipAddr);
+        extraClaims.put("firstName", user.getFirstName());
+        extraClaims.put("lastName", user.getLastName());
+        extraClaims.put("phoneNumber", user.getPhoneNumber());
 
         return extraClaims;
     }

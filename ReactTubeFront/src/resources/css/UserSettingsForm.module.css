@@ -1,0 +1,47 @@
+.form_error {
+	color: #ff4b2b;
+	margin: 1px;
+	padding: 0;
+	font-size: 0.8em;
+    position: relative;
+}
+
+.user_settings_form{
+    width: 80%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto;
+
+    justify-content: center;
+    justify-items: center;
+    align-items: center;
+    align-content: space-around;
+}
+
+.settings_submit_btn{
+    grid-column: 1 / 4;
+    justify-self: center;
+    align-self: center;
+    width: 20%;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.password_input{
+    grid-column: 1/4;
+    width: 1;
+}
+
+.form_label {
+    margin-bottom: 0.5rem;
+    font-weight: semibold;
+    color: var(--color-dark);
+}
+
+.form_group {
+    margin-bottom: 1rem;
+    width: 100%;
+}
+.form_input{
+    width: 80%;
+}

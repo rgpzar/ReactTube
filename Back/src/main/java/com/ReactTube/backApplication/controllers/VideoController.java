@@ -68,21 +68,28 @@ public class VideoController {
         return videoFileService.getVideo(video);
     }
 
+    @GetMapping("/client/watch/{id}")
+    public String sendVideoUrl (@PathVariable("id") long id) throws NoUserAuthorizedException {
+        Video video = videoService.getVideoById(id);
+        visitService.addVisit(video);
+        return "http://localhost:8080/video/watch/" + id;
+    }
+
     @PostMapping("/upload")
     public ResponseEntity<String> uploadVideo(
             @RequestParam("file") MultipartFile file,
             @RequestParam("title") String title,
             @RequestParam("description") String description
     ){
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 
         try{
             //Use getCurrentAuthenticatedUser() to get the current logged user, there will be a logged user because of the security
             User currentUser = authenticationService.getCurrentAuthenticatedUser();
+            boolean videoExists = videoService.existsByTitle(title);
+            boolean videoUploadSuccess;
 
 
-
-            if(!videoService.existsByTitle(title)){
+            if(!videoExists){
                 videoFileService.uploadVideo(file, title);
 
                 Video video = Video.builder()
@@ -92,16 +99,22 @@ public class VideoController {
                         .uploadDate(new Date())
                         .durationInSeconds(videoFileService.getVideoDurationInSeconds(title))
                         .build();
-                videoService.saveVideo(video);
+
+                videoUploadSuccess = videoService.saveVideo(video);
+                
+                if(videoUploadSuccess)
+                    return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
             }else {
                 return new ResponseEntity<>("Video already exists", HttpStatus.CONFLICT);
             }
 
-            return new ResponseEntity<>("Video uploaded successfully", HttpStatus.OK);
+
         } catch (Exception e){
             LOGGER.warning(e.getMessage());
             return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping(value = "getVideoThumbnail/{id}", produces = "image/png")

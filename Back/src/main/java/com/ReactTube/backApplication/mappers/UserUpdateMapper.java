@@ -1,7 +1,8 @@
 package com.ReactTube.backApplication.mappers;
 
 import com.ReactTube.backApplication.dto.UploadedByDto;
-import com.ReactTube.backApplication.dto.UserDto;
+import com.ReactTube.backApplication.dto.UserInputDto;
+import com.ReactTube.backApplication.dto.UserOutputDto;
 import com.ReactTube.backApplication.models.User;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -15,12 +16,15 @@ public interface UserUpdateMapper {
     UserUpdateMapper INSTANCE = Mappers.getMapper( UserUpdateMapper.class );
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserFromDto(UserDto userDto, @MappingTarget User user);
+    void updateUserFromDto(UserInputDto userInputDto, @MappingTarget User user);
 
     UploadedByDto uploadedByDtoFromUser(User user);
     User userFromUploadedByDto(UploadedByDto uploadedByDto);
 
-    User userFromUserDto(UserDto userDto);
+    User userFromUserDto(UserOutputDto userOutputDto);
 
-    UserDto userDtoFromUser(User user);
+    UserOutputDto userOutputDtoFromUser(User user);
+
+    UserOutputDto userOutputDtoFromUserInputDto(UserInputDto userInputDto);
+
 }

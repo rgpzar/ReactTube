@@ -31,6 +31,9 @@ const loginReducer = (state = initialState, action) => {
     switch (action.type) {
         case actions.CHECK_STORAGE:
             const session = getStoredSession();
+            if(!session.jwt){
+                location.replace('/');
+            }
             return session.jwt ? session : state;
 
         case actions.STORE_NEW_SESSION:
