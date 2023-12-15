@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
+
+
+button.editFormBtn{
+    position: absolute;
+    top: 80px;
+    right: 11vw;
+    padding: 1em;
+}
+
+button.editFormBtn img{
+    width: 16px;
+    height: 16px;
+}
+
+button.editFormBtn:hover{
+    cursor: pointer;
+    background: #E9442B;
+}

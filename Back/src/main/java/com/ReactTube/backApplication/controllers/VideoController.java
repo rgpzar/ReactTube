@@ -1,6 +1,7 @@
 package com.ReactTube.backApplication.controllers;
 
 import com.ReactTube.backApplication.dto.VideoDto;
+import com.ReactTube.backApplication.dto.VideoInputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
 import com.ReactTube.backApplication.models.Comment;
 import com.ReactTube.backApplication.models.User;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -22,10 +24,9 @@ import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/video")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class VideoController {
     private final VideoService videoService;
-    private final VisitService visitService;
+    private VisitService visitService;
     private final CommentService commentService;
     private final VideoFileService videoFileService;
 
@@ -117,6 +118,19 @@ public class VideoController {
         return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+
+    @PutMapping("/{id}")
+    public Boolean updateVideo(@PathVariable("id") long id, @RequestBody VideoInputDto videoInputDto) throws NoUserAuthorizedException, IOException {
+        Video video = videoService.getVideoById(id);
+        User authenticatedUser = authenticationService.getCurrentAuthenticatedUser();
+
+        if(video.getUploadedBy().getId() != authenticatedUser.getId()){
+            throw new NoUserAuthorizedException("User is not authorized to update this video");
+        }
+
+        videoService.updateVideo(video, videoInputDto);
+        return true;
+    }
     @GetMapping(value = "getVideoThumbnail/{id}", produces = "image/png")
     public Mono<Resource> getVideoThumbnail(@PathVariable("id") long id)  {
         Video video = videoService.getVideoById(id);

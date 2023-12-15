@@ -47,7 +47,8 @@ public class CommentService {
         commentId.setTime(new Date());
 
         newComment.setId(commentId);
-        newComment.setMessage(commentString);
+        newComment.setMessage(commentString.trim());
+        newComment.setUsername(user.getUsername());
 
         return commentRepo.save(newComment);
     }

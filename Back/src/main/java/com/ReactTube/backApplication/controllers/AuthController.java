@@ -12,26 +12,26 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.logging.Logger;
+
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @Builder
 @Data
 @AllArgsConstructor
 public class AuthController {
     private final AuthenticationService authService;
+    private final Logger LOGGER = Logger.getLogger(AuthController.class.getName());
     @PreAuthorize("permitAll")
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login(@RequestBody @Validated AuthenticationRequest authRequest, HttpServletRequest request) {
         AuthenticationResponse jwt = null;
         try{
             jwt = authService.login(authRequest, request);
+            LOGGER.info("User " + authRequest.getUsername() + " logged in.");
         }catch (Exception e){
-            System.out.println(e.getMessage());
-            System.out.println("A not authorized client tried to access into the API");
-        }finally {
-            System.out.println(authRequest.getUsername());
-            System.out.println(authRequest.getPassword());
+            LOGGER.warning(e.getMessage());
+            LOGGER.info("A not authenticated user tried to log in.");
         }
 
         return ResponseEntity.ok(jwt);

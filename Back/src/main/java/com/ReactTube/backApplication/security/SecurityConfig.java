@@ -33,18 +33,21 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
-    private CorsConfigurationSource corsConfigurationSource(){
+    public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
+        config.applyPermitDefaultValues(); // Aplica valores predeterminados
 
-        config.setAllowedOrigins(List.of("*"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
 
         return source;
     }
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -71,8 +74,9 @@ public class SecurityConfig {
                     authConfig.requestMatchers(HttpMethod.PUT, "/video/*/like").authenticated();
                     authConfig.requestMatchers(HttpMethod.POST, "/video/upload").authenticated();
                     authConfig.requestMatchers(HttpMethod.DELETE, "/video/*").authenticated();
+                    authConfig.requestMatchers(HttpMethod.PUT, "/video/*").authenticated();
 
-                    //USER SETTINGS ENDDPOINTS
+                    //USER SETTINGS ENDPOINTS
                     authConfig.requestMatchers(HttpMethod.GET, "/setting/info").authenticated();
                     authConfig.requestMatchers(HttpMethod.PUT, "/setting/update").authenticated();
                     authConfig.requestMatchers(HttpMethod.DELETE, "/setting/delete").authenticated();

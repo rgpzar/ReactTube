@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @Builder
@@ -48,8 +49,18 @@ public class AuthenticationService {
 
     @Transactional
     public AuthenticationResponse login(AuthenticationRequest authRequest, HttpServletRequest request) {
-        if(authRequest.getUsername() == null || authRequest.getPassword() == null || authRequest.getUsername().equals("Guest"))
-            throw new UsernameNotFoundException("The username or password is null.");
+        String usernameRegex = "^[a-zA-Z0-9._-]{3,}$"; // Ejemplo: solo letras, números y algunos caracteres especiales, mínimo 3 caracteres
+
+        // Validación del nombre de usuario y la contraseña
+        if (authRequest.getUsername() == null || authRequest.getPassword() == null) {
+            throw new IllegalArgumentException("Username or password cannot be null.");
+        }
+        if (!Pattern.matches(usernameRegex, authRequest.getUsername())) {
+            throw new IllegalArgumentException("Invalid username format.");
+        }
+        if (authRequest.getUsername().equals("Guest")) {
+            throw new UsernameNotFoundException("Guest account is not allowed.");
+        }
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             authRequest.getUsername(), authRequest.getPassword()

@@ -14,7 +14,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin(origins = "*", allowedHeaders = "*")
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;

@@ -21,4 +21,5 @@ public class Comment {
     @Column(nullable = false)
     private String message;
 
+    private String username;
 }

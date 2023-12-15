@@ -1,13 +1,12 @@
 import {BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Home from "../components/routes/Home";
-import Dashboard from "../components/routes/Dashboard";
-import NotAuthorized from "../components/routes/NotAuthorized";
-import { LogOut } from "../components/routes/LogOut";
-import Documentation from "../components/routes/Documentation";
-import Authenticate from "../components/routes/Authenticate";
-import UploadVideoForm from "../components/routes/UploadVideoForm";
-import VideoPage from "../components/routes/VideoPage";
+import Home from "./routes/Home/Home.jsx";
+import Dashboard from "./routes/Dashboard/Dashboard.jsx";
+import { LogOut } from "./routes/LogOut/LogOut.jsx";
+import Authenticate from "./routes/Authenticate/Authenticate.jsx";
+import UploadVideoForm from "./routes/UploadVideoForm/UploadVideoForm.jsx";
+import VideoPage from "./routes/VideoPage/VideoPage.jsx";
+import VideoEditPage from "./routes/VideoPage/VideoEditPage.jsx";
 
 export const AppRouter = () => {
 
@@ -18,11 +17,10 @@ export const AppRouter = () => {
             <Routes>
                 <Route path="/home" Component={() => <Home/>}/>
                 <Route path="/dashboard" Component={() => <Dashboard/>}/>
-                <Route path='/forbidden' Component={() => <NotAuthorized/>}/>
                 <Route path="/logout" Component={() => <LogOut/>}/>
-                <Route path="/docs" Component={() => <Documentation/>} />
                 <Route path="/uploadVideo" Component={() => <UploadVideoForm/>}/>
                 <Route path="watch/:id" Component={() => <VideoPage/>}/>
+                <Route path="edit/:id" Component={() => <VideoEditPage/>}/>
                 <Route exact path="/" Component={() => <Authenticate/>}/>
             </Routes>
             

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository
 public interface VisitRepo extends CrudRepository<Visit, UserVideoPK> {
-    @Query(value = "SELECT * FROM visit v WHERE v.user_id = :userId AND v.video_id = :videoId", nativeQuery = true)
+    @Query(value = "SELECT * FROM visit WHERE user_id = :userId AND video_id = :videoId ORDER BY time DESC LIMIT 1", nativeQuery = true)
     Optional<Visit> findByUseridAndVideoId(long userId, long videoId);
 
     Set<Visit> findByIdVideoId(long videoId);

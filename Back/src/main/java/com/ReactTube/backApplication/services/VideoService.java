@@ -2,40 +2,46 @@ package com.ReactTube.backApplication.services;
 
 import com.ReactTube.backApplication.dto.UploadedByDto;
 import com.ReactTube.backApplication.dto.VideoDto;
+import com.ReactTube.backApplication.dto.VideoInputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.VideoAlreadyExistsException;
 import com.ReactTube.backApplication.errorHandling.customExceptions.VideoNotFoundException;
-import com.ReactTube.backApplication.mappers.UserUpdateMapper;
+
+import com.ReactTube.backApplication.mappers.VideoMapper;
+import com.ReactTube.backApplication.mappers.UserMapper;
 import com.ReactTube.backApplication.models.Comment;
 import com.ReactTube.backApplication.models.Video;
 import com.ReactTube.backApplication.models.Visit;
 import com.ReactTube.backApplication.repositories.VideoRepo;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 public class VideoService {
     private final VideoRepo videoRepo;
-    private final VisitService visitService;
+    private  VisitService visitService;
     private final CommentService commentService;
+
+    private final VideoFileService videoFileService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VideoService.class);
 
     public VideoService(
             @Autowired VideoRepo videoRepo,
             @Autowired VisitService visitService,
-            @Autowired CommentService commentService
+            @Autowired CommentService commentService,
+            @Autowired VideoFileService videoFileService
     ) {
         this.videoRepo = videoRepo;
         this.visitService = visitService;
         this.commentService = commentService;
+        this.videoFileService = videoFileService;
     }
 
 
@@ -56,17 +62,20 @@ public class VideoService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public VideoDto getVideoDtoById(long id) {
         Video video = videoRepo.findById(id)
                 .orElseThrow(() -> new VideoNotFoundException("Video couldn't be found."));
         List<Comment> comments = commentService.getCommentByVideoId(id);
+        Collections.reverse(comments);
         Set<Visit> visits = visitService.getVisitsByVideoId(id);
 
-        UploadedByDto uploadedBy = UserUpdateMapper.INSTANCE.uploadedByDtoFromUser(video.getUploadedBy());
+        UploadedByDto uploadedBy = UserMapper.INSTANCE.uploadedByDtoFromUser(video.getUploadedBy());
 
         return new VideoDto(video, (ArrayList<Comment>) comments, visits, uploadedBy);
     }
 
+    @Transactional
     public Video getVideoById(long id) {
         return videoRepo.findById(id)
                 .orElseThrow(() -> new VideoNotFoundException("Video couldn't be found."));
@@ -103,5 +112,11 @@ public class VideoService {
             return false;
         }
 
+    }
+
+    public void updateVideo(Video video, VideoInputDto videoInputDto) throws IOException {
+        videoFileService.updateVideoTitle(video.getTitle(), videoInputDto.getTitle());
+        VideoMapper.INSTANCE.updateVideoFromVideoInputDto(videoInputDto, video);
+        videoRepo.save(video);
     }
 }

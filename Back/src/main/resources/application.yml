@@ -5,7 +5,13 @@ spring:
     url: jdbc:mysql://localhost:3306/react_tube
     username: root
     password: spring
-    max-active: 10
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+      pool-name: SpringBootHikariCP
+      max-lifetime: 2000000
+      connection-timeout: 30000
   jpa:
     hibernate:
       ddl-auto: update
@@ -33,7 +39,7 @@ security:
 
 stream_conf:
   visit:
-    max_minutes_between_visits: 1
+    max_minutes_between_visits: 2
 
 bucket4j:
   filters:

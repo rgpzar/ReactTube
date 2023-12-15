@@ -18,9 +18,4 @@ public class Visit {
     @EmbeddedId
     private UserVideoPK id;
 
-    @Column(nullable = false)
-    private int timesVisited;
-
-    @Column(nullable = false)
-    private boolean userLike;
 }

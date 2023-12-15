@@ -4,7 +4,7 @@ import com.ReactTube.backApplication.dto.UpdatedUserResponseDto;
 import com.ReactTube.backApplication.dto.UserInputDto;
 import com.ReactTube.backApplication.dto.UserOutputDto;
 import com.ReactTube.backApplication.errorHandling.customExceptions.NoUserAuthorizedException;
-import com.ReactTube.backApplication.mappers.UserUpdateMapper;
+import com.ReactTube.backApplication.mappers.UserMapper;
 import com.ReactTube.backApplication.models.User;
 import com.ReactTube.backApplication.services.AuthenticationService;
 import com.ReactTube.backApplication.services.JwtService;
@@ -34,7 +34,7 @@ public class UserSettingsController {
     @CrossOrigin(origins = "*", allowedHeaders = "*")
     public Optional<UserOutputDto> info() throws NoUserAuthorizedException {
         return Optional.ofNullable(
-                UserUpdateMapper.INSTANCE.userOutputDtoFromUser(authenticationService.getCurrentAuthenticatedUser()
+                UserMapper.INSTANCE.userOutputDtoFromUser(authenticationService.getCurrentAuthenticatedUser()
         ));
     }
 
@@ -50,7 +50,7 @@ public class UserSettingsController {
         }
 
 
-        UserUpdateMapper.INSTANCE.updateUserFromDto(userInputDto, user);
+        UserMapper.INSTANCE.updateUserFromDto(userInputDto, user);
 
         System.out.println(userInputDto);
 
@@ -59,7 +59,7 @@ public class UserSettingsController {
         userService.saveUser(user);
 
         UpdatedUserResponseDto updatedUserResponse = UpdatedUserResponseDto.builder()
-                .userOutputDto(UserUpdateMapper.INSTANCE.userOutputDtoFromUser(user))
+                .userOutputDto(UserMapper.INSTANCE.userOutputDtoFromUser(user))
                 .build();
 
         String password = userInputDto.getPassword();

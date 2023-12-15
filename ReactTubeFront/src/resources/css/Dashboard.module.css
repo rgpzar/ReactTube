@@ -1,9 +1,0 @@
-@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
-
-
-.editFormBtn{
-    position: absolute;
-    z-index: 100;
-    top: 10vh;
-    right: 1vw;
-}

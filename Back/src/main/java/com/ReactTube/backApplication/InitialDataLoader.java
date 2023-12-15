@@ -32,7 +32,7 @@ public class InitialDataLoader {
             User.builder()
                     .username("rgrapac")
                     .email("rgranadospacheco@gmail.com")
-                    .password("Test123")
+                    .password("Test1234")
                     .role(Role.ADMIN)
                     .build(),
             User.builder()
@@ -84,6 +84,7 @@ public class InitialDataLoader {
                 userService.saveUser(user);
             }catch (Exception e){
                 LOGGER.error("User {} already loaded", user);
+                LOGGER.error(e.getMessage());
             }
         }
     }

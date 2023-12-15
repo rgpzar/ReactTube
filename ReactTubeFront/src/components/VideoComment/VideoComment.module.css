@@ -1,0 +1,19 @@
+.comment_card{
+    background: rgb(236, 236, 236);
+    border-radius: 5px;
+    padding: 10px;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+
+    gap: 5px;
+}
+
+.comment_card > p{
+    margin: 0px;
+}
+
+.comment_card > span{
+    color: #606060;
+}

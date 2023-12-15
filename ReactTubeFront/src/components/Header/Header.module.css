@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Cabin:wght@700&display=swap');
+
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    width: 100%;
+
+    z-index: 10;
+
+    display: flex;
+
+    flex-flow: row nowrap;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0em 1.2em;
+
+    height: 60px;
+
+    border-bottom: 1px solid lightgrey;
+    background-color: white;
+
+}
+
+header > nav{
+    width: 500px;
+    position: relative;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+
+    text-align: right;
+}
+
+header > nav > ul{
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    right: 0;
+    top: 0;
+    display: flex;
+
+    flex-flow: column nowrap;
+
+    justify-content: flex-start;
+
+    gap: 50px;
+    align-items: center;
+
+    width: 100%;
+
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-top: 3em;
+
+    background-color: white;
+    z-index: 150;
+
+    transition: all .2s ease-in-out;
+
+    transform: translate(520px, 40px);
+
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+}
+
+.active{
+    transform: translate(0, 0);
+}
+
+header > nav > ul > li{
+    transition: all .2s;
+}
+
+header > nav > ul > li > a{
+    transition: all .2s;
+
+    font-size: .9em;
+}
+
+
+header > nav > ul > li > a > span{
+    transition: all .2s;
+
+    font-size: 1.5em;
+}
+
+header > nav > ul > li > a:hover{
+    cursor: pointer;
+
+    color: #E9442B;
+}
+
+header > nav > ul > li:hover{
+    transform: translateY(-1px);
+    border-bottom: 1px solid lightgrey;
+}
+
+
+header > nav > ul > li.selected{
+    font-weight: 500;
+    border-bottom: 1px solid rgb(233,68,43);
+}
+
+header > div.wrapper{
+    flex-basis: 20%;
+    width: 20%;
+
+    position: relative;
+    top: 0;
+}
+
+svg {
+	font-family: "Cabin";
+	width: 80%; height:30%;
+}
+svg text {
+    stroke-width: 2;
+	stroke: #E9442B;
+    color: #E9442B;
+    fill: #E9442B;
+	font-size: 1.8em;
+    font-weight: 100;
+    animation: stroke 3s alternate;
+    stroke-width: .5;
+}
+
+svg text:hover{
+    cursor: pointer;
+    animation: stroke 3s infinite alternate;
+}
+
+@keyframes stroke {
+	0%   {
+		fill: rgba(255,74,47,0); stroke: rgba(233,68,43,1);
+		stroke-dashoffset: 25%; stroke-dasharray: 0 50%; stroke-width: 1;
+	}
+	70%  {fill: rgba(255,74,47,0); stroke: rgba(233,68,43,1); }
+	80%  {fill: rgba(255,74,47,0); stroke: rgba(233,68,43,1); stroke-width: 2; }
+	100% {
+		fill: rgba(255,74,47,1); stroke: rgba(255, 255, 255, 0);
+		stroke-dashoffset: -25%; stroke-dasharray: 50% 0; stroke-width: 0;
+	}
+}
+
+.closeBtn{
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 1.5em;
+    color: #E9442B;
+    transition: all .2s;
+
+    z-index: 100;
+
+    width: 24px;
+    height: auto;
+    margin: .5em 1em;
+}
+
+.closeBtn:hover{
+    cursor: pointer;
+    width: 26px;
+}
+
+.showBtn{
+    width: 32px;
+    margin: 0px 10px;
+    z-index: 99;
+}
+
+.showBtn:hover{
+    cursor: pointer;
+    width: 34px;
+}
