@@ -6,6 +6,7 @@ import { actions } from "../../helpers/actions.js";
 import { useEffect, useState} from "react";
 
 import styles from "./UserSettingsForm.module.css";
+import {toast} from "react-toastify";
 
 
 const UserSettingsForm = ({userInfo}) => {
@@ -32,6 +33,7 @@ const UserSettingsForm = ({userInfo}) => {
     }, [jwt, dispatch]);
 
     const onSubmit = (data) => {
+        toast.info("Updating user settings...");
         console.log(data);
         // Perform validation and submit the form data to the backend
         fetch("http://localhost:8080/setting/update", {
@@ -42,10 +44,14 @@ const UserSettingsForm = ({userInfo}) => {
                 "Authorization": jwt
             }
         })
-            .then(response => response.json())
+            .then(response => {
+
+                return response.json();
+            })
             .then(result => {
                 // Handle the response from the backend
                 console.log(result);
+                toast.success("User settings updated successfully!");
                 dispatch({type: actions.STORE_NEW_SESSION, payload: result});
             })
             .catch(error => {

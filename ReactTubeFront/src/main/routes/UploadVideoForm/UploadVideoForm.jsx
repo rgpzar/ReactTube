@@ -37,7 +37,7 @@ const UploadVideoForm = () => {
     });
 
     const onSubmit = (data) => {
-
+        toast.info("Uploading video...");
 
         const formData = new FormData();
         if (selectedFile) {
@@ -45,6 +45,7 @@ const UploadVideoForm = () => {
         } else {
             // Manejar el caso en que no se haya seleccionado un archivo
             console.error("No file selected");
+            toast.error("No file selected");
             return;
         }
 
@@ -61,7 +62,6 @@ const UploadVideoForm = () => {
             }
         })
             .then((response) => {
-
                 return response.text();
             })
             .then((data) => {

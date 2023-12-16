@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import styles from "./CommentInput.module.css";
 import {useCheckSession} from "../../helpers/customHooks/useCheckSession.js";
+import {toast} from "react-toastify";
 
 const CommentInput = ({ videoId, setNewComment}) => {
     const [comment, setComment] = useState('');
@@ -29,9 +30,11 @@ const CommentInput = ({ videoId, setNewComment}) => {
                 console.log('Comment submitted:', data);
                 setNewComment(data);
                 setComment('');
+                toast.success('Comment submitted successfully!');
             })
             .catch(error => {
                 console.error('Error submitting comment:', error);
+                toast.error('Error submitting comment!');
             });
     };
 
