@@ -31,14 +31,20 @@ export const Home = () => {
                 }
 
                 const videos = await response.json();
-                const filteredVideos = videos.filter(videoDto => 
+                 if(searchTerm === "") {
+                    setVideoList(videos);
+                    return;
+                 }
+
+                const filteredVideos = videos.filter(videoDto =>
                     videoDto.video.title.toLowerCase().includes(searchTerm.toLowerCase())
                 );
+
+                 filteredVideos.reverse();
                 setVideoList(filteredVideos);
 
             } catch (error) {
                 console.error('There was a problem with the fetch operation:', error);
-                // Considera un mejor manejo de errores aquí
             }
         };
 

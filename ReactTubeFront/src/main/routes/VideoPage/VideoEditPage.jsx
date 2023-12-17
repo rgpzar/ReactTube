@@ -65,7 +65,6 @@ const VideoEditPage = () => {
     const onSubmit = (data) => {
 
         console.log(data);
-        toast.info("Editing video...");
         // Send data to the server
         fetch(`http://localhost:8080/video/${id}`, {
             method: 'PUT',
@@ -95,7 +94,6 @@ const VideoEditPage = () => {
     };
 
     const onDelete = () => {
-        toast.info("Deleting video...");
         // Send data to the server
         fetch(`http://localhost:8080/video/${id}`, {
             method: 'DELETE',

@@ -1,7 +1,7 @@
 # Implementación
 
 ## Arquitectura de base de datos
-### Entidad USER (Usuario):
+Entidad USER (Usuario):
 
 Representa a los usuarios del sistema.
 Atributos:
@@ -13,7 +13,7 @@ Atributos:
 - phone_number: Número de teléfono del usuario.
 - role: Rol del usuario (puede ser 'ADMIN' o 'USER').
 - username: Nombre de usuario (único).
-### Entidad VIDEO (Vídeo):
+Entidad VIDEO (Vídeo):
 
 Representa los vídeos subidos por los usuarios.
 Atributos:
@@ -23,7 +23,7 @@ Atributos:
 - title: Título del vídeo (único).
 - upload_date: Fecha de subida del vídeo.
 - uploaded_by: Identificador del usuario que subió el vídeo (clave foránea).
-### Entidad COMMENT (Comentario):
+Entidad COMMENT (Comentario):
 
 Representa los comentarios hechos por los usuarios en los vídeos.
 Atributos:
@@ -32,14 +32,14 @@ Atributos:
 - video_id: Identificador del vídeo comentado (clave foránea y parte de la clave primaria).
 - message: Mensaje del comentario.
 - username: Nombre de usuario que hizo el comentario.
-### Entidad VISIT (Visita):
+Entidad VISIT (Visita):
 
 Representa las visitas de los usuarios a los vídeos.
 Atributos:
 - time: Fecha y hora de la visita (parte de la clave primaria).
 - user_id: Identificador del usuario que visitó el vídeo (clave foránea y parte de la clave primaria).
 - video_id: Identificador del vídeo visitado (clave foránea y parte de la clave primaria).
-#### Relaciones:
+####Relaciones:
 
 - USER a VIDEO: Un usuario puede subir varios vídeos.
 - USER a COMMENT: Un usuario puede hacer varios comentarios.
@@ -48,11 +48,11 @@ Atributos:
 - VIDEO a VISIT: Un vídeo puede ser visitado varias veces.
 
 ## *Arquitectura backend - Springboot*
-## Controladores en Spring Boot
+### Controladores
 
 En Spring Boot, un controlador es una clase que maneja solicitudes HTTP. Se utiliza para dirigir el flujo de datos entre el frontend y el backend, y está marcado con anotaciones como `@RestController` y `@RequestMapping`. Los controladores en Spring Boot facilitan la creación de APIs RESTful, permitiendo manejar diferentes tipos de solicitudes y devolver respuestas adecuadas. En este caso, voy a esbozar mi controlador mas complejo, el controlador de video:
 
-## Lógica del Controlador de Video en ReactTube
+Lógica del Controlador de Video en ReactTube
 
 | Método | Tipo de Solicitud | Descripción |
 | ------ | ----------------- | ----------- |
@@ -69,7 +69,7 @@ En Spring Boot, un controlador es una clase que maneja solicitudes HTTP. Se util
 
 Cada método del `VideoController` está diseñado para manejar una operación específica relacionada con los videos en la plataforma ReactTube, utilizando servicios inyectados para procesar la lógica de negocio.
 
-### Código del controlador de video
+Código del controlador de video
 
 ```java
 package com.ReactTube.backApplication.controllers;
@@ -208,18 +208,18 @@ public class VideoController {
 }
 }
 ```
----
-## Modelos en Spring Boot
+
+### Modelos
 
 En Spring Boot, los modelos representan la estructura de datos y se utilizan para mapear las tablas de la base de datos. Son esenciales para el manejo de la información en el backend y facilitan la interacción con la base de datos a través de JPA (Java Persistence API).
 
-## Estructura del Modelo de Usuario en ReactTube
+Estructura del Modelo de Usuario en ReactTube
 
 El modelo `User` en ReactTube representa a los usuarios de la plataforma. Implementa la interfaz `UserDetails` de Spring Security, lo que facilita la integración con el sistema de autenticación y autorización.
 
 El modelo de Usuario es un componente clave en la arquitectura de ReactTube, permitiendo una gestión eficiente y segura de los usuarios y sus interacciones con la plataforma. Implementa varias abstracciones de relaciones complejas MySql entre las distintas tablas de la aplicacion.
 
-### Propiedades del Modelo de Usuario
+Propiedades del Modelo de Usuario
 
 | Propiedad | Tipo | Descripción |
 | --------- | ---- | ----------- |
@@ -235,17 +235,15 @@ El modelo de Usuario es un componente clave en la arquitectura de ReactTube, per
 | `lastName` | `String` | Apellido del usuario (opcional). |
 | `phoneNumber` | `String` | Número de teléfono del usuario (opcional). |
 
-### Funcionalidad y Escalabilidad
-
 El modelo `User` está diseñado para ser escalable y adaptable a futuras expansiones de la aplicación. Incluye campos para información personal y de contacto, que aunque no son requeridos para el registro, están preparados para una posible escalación en futuras versiones de la aplicación. Este enfoque permite una fácil adaptación a nuevas funcionalidades y requisitos.
 
----
 
-## Servicios en Spring Boot
+
+### Servicios
 
 Los servicios en Spring Boot son componentes clave que contienen la lógica de negocio y las operaciones de la aplicación. Están marcados con la anotación `@Service` y suelen interactuar con los repositorios para realizar operaciones en la base de datos.
 
-## Lógica del Servicio de Video en ReactTube
+Lógica del Servicio de Video en ReactTube
 
 El `VideoService` maneja las operaciones relacionadas con los videos en la plataforma, incluyendo la visualización, búsqueda, actualización y eliminación de videos.
 
@@ -363,11 +361,11 @@ public class VideoService {
 }
 ```
 
-## Lógica del Servicio de Autenticación en ReactTube
+Lógica del Servicio de Autenticación en ReactTube
 
 El `AuthenticationService` gestiona la autenticación y autorización de los usuarios, incluyendo el inicio de sesión y la generación de tokens JWT.
 
-### Métodos del AuthenticationService
+Métodos del AuthenticationService
 
 | Método | Descripción |
 | ------ | ----------- |
@@ -375,26 +373,26 @@ El `AuthenticationService` gestiona la autenticación y autorización de los usu
 | `login` | Autentica a un usuario y genera un token JWT. |
 | `generateExtraClaims` | Genera reclamaciones adicionales para el token JWT. |
 
----
-## Filtros en Spring Boot
+
+### Filtros
 
 Los filtros en Spring Boot son componentes que interceptan y procesan solicitudes HTTP antes de que lleguen a los controladores. Son esenciales para tareas como autenticación, registro y manejo de errores.
 
-## Lógica del JwtAuthenticationFilter en ReactTube
+Lógica del JwtAuthenticationFilter en ReactTube
 
 El `JwtAuthenticationFilter` es un filtro personalizado que se ejecuta una vez por cada solicitud HTTP para manejar la autenticación basada en JWT (JSON Web Token).
 
-### Funcionamiento del JwtAuthenticationFilter
+- Funcionamiento del JwtAuthenticationFilter
 
 El filtro `JwtAuthenticationFilter` extiende `OncePerRequestFilter`, asegurando que se ejecute una vez por cada solicitud entrante.
 
-#### Método del JwtAuthenticationFilter
+- Método del JwtAuthenticationFilter
 
 | Método | Descripción |
 | ------ | ----------- |
 | `doFilterInternal` | Intercepta la solicitud, extrae y valida el token JWT, autentica al usuario y continúa con la cadena de filtros. |
 
-#### Proceso del Filtro
+- Proceso del Filtro
 
 1. **Obtención del Token**: Extrae el token JWT del encabezado `Authorization` de la solicitud HTTP.
 2. **Validación del Token**: Verifica si el encabezado de autorización es nulo o si no comienza con "Bearer ".
@@ -447,24 +445,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 }
 ```
 
-## DTOs (Data Transfer Objects) en ReactTube
+### DTOs (Data Transfer Objects)
 
 Los DTOs (Data Transfer Objects) en ReactTube son utilizados para transferir datos entre diferentes capas de la aplicación, especialmente entre la lógica de negocio y la presentación. Permiten una comunicación eficiente y segura de los datos.
 
-## Estructura de los DTOs en ReactTube
+Estructura de los DTOs en ReactTube
 
-### AuthenticationRequest
+- AuthenticationRequest
 
 El `AuthenticationRequest` DTO se utiliza para encapsular los datos de autenticación del usuario.
 
-#### Propiedades del AuthenticationRequest
+#Propiedades del AuthenticationRequest
 
 | Propiedad | Tipo | Descripción |
 | --------- | ---- | ----------- |
 | `username` | `String` | Nombre de usuario utilizado para la autenticación. |
 | `password` | `String` | Contraseña del usuario para la autenticación. |
 
-#### Código del DTO
+Código del DTO
 
 ``` java
 @Builder
@@ -477,18 +475,18 @@ public class AuthenticationRequest {
 }
 ```
 
-### VideoInputDto
+VideoInputDto
 
 El `VideoInputDto` DTO se utiliza para transferir datos de entrada relacionados con los videos.
 
-#### Propiedades del VideoInputDto
+#Propiedades del VideoInputDto
 
 | Propiedad | Tipo | Descripción |
 | --------- | ---- | ----------- |
 | `title` | `String` | Título del video. |
 | `description` | `String` | Descripción del video. |
 
-#### Código del DTO
+Código del DTO
 
 ``` java
 @Builder
@@ -499,17 +497,17 @@ public class VideoInputDto {
 }
 ```
 
----
 
-## Manejo Global de Excepciones en ReactTube
+
+### Manejo Global de Excepciones en ReactTube
 
 El manejo global de excepciones en ReactTube se realiza a través del `GlobalExceptionHandler`. Este componente intercepta las excepciones lanzadas durante la ejecución de la aplicación y proporciona respuestas HTTP adecuadas.
 
-## Funcionamiento del GlobalExceptionHandler
+#### Funcionamiento del GlobalExceptionHandler
 
 El `GlobalExceptionHandler` extiende `ResponseEntityExceptionHandler` y está anotado con `@ControllerAdvice` para manejar excepciones de toda la aplicación.
 
-### Métodos del GlobalExceptionHandler
+#### Métodos del GlobalExceptionHandler
 
 | Método | Excepción Manejada | Descripción |
 | ------ | ------------------ | ----------- |
@@ -521,11 +519,9 @@ El `GlobalExceptionHandler` extiende `ResponseEntityExceptionHandler` y está an
 | `handleFileNotFoundException` | `FileNotFoundException` | Devuelve una respuesta 404 cuando no se encuentra un archivo solicitado. |
 | `handleGenericExceptions` | `Exception` | Maneja excepciones genéricas, devolviendo una respuesta 500 o 403 según el tipo de excepción. |
 
----
+
 
 Este manejador global de excepciones es crucial para la robustez de ReactTube, asegurando que los errores se manejen de manera coherente y proporcionando respuestas claras y útiles a los usuarios y al sistema.
-
-## *Arquitectura frontend - ReactJS*
 
 ## Arquitectura Frontend - React
 
@@ -533,7 +529,7 @@ Este manejador global de excepciones es crucial para la robustez de ReactTube, a
 
 React Router es una biblioteca esencial para el enrutamiento en aplicaciones React. Facilita la definición de rutas y la renderización de componentes basados en la URL, lo que es crucial para la navegación y la estructura de la aplicación.
 
-#### Uso de React Router en ReactTube
+Uso de React Router en ReactTube
 
 ReactTube utiliza React Router para gestionar la navegación entre diferentes vistas y componentes. A continuación se muestra cómo se configura el enrutamiento en ReactTube:
 
@@ -556,15 +552,15 @@ export const AppRouter = () => {
 
 export default AppRouter;
 ```
----
+
 
 ### Estado Global en React con Redux
 El estado global en una aplicación React se refiere a un estado que está disponible en toda la aplicación y que puede ser accedido y modificado por varios componentes sin necesidad de pasar propiedades a través de múltiples niveles de jerarquía. Redux es una biblioteca muy utilizada para gestionar el estado global en aplicaciones React.
 
-### ¿Qué es Redux?
+#### ¿Qué es Redux?
 Redux es una biblioteca de gestión de estado global para aplicaciones JavaScript, incluyendo aplicaciones React. Proporciona una forma predecible y centralizada de administrar el estado de una aplicación, lo que facilita la gestión de datos compartidos entre múltiples componentes y la manipulación del estado de forma segura.
 
-#### Redux se basa en tres conceptos principales:
+Redux se basa en tres conceptos principales:
 
 - Store: El "almacén" es un objeto que contiene todo el estado de la aplicación. Es único y accesible desde cualquier parte de la aplicación.
 
@@ -649,13 +645,13 @@ export const getUser = (state) => state?.user || null;
 ```
 
 
-###Componentes en React
+### Componentes en React
 Los componentes son bloques de construcción fundamentales en una aplicación React. Son piezas reutilizables de código que encapsulan la lógica y la interfaz de usuario de una parte específica de la aplicación. Los componentes permiten dividir una aplicación en partes más pequeñas y manejables, lo que facilita el desarrollo y el mantenimiento de la aplicación.
 
-####¿Qué son los Componentes en React?
+#### ¿Qué son los Componentes en React?
 En React, un componente es una función o una clase que devuelve elementos de React (usualmente JSX) que representan una parte de la interfaz de usuario. Los componentes pueden ser simples, como botones o encabezados, o complejos, como formularios o páginas completas.
 
-####Implementación de Componentes en ReactTube
+#### Implementación de Componentes en ReactTube
 En el proyecto ReactTube, se utilizan varios componentes para construir la página de visualización de un video. Aquí hay una descripción de cómo se utilizan los componentes en el código proporcionado:
 
 En el código:
@@ -746,7 +742,7 @@ const VideoPage = () => {
               <div className={styles.video_description}>
                 <p>
                   {getVideoTotalVisits(videoVisits)}  {(getVideoTotalVisits(videoVisits) > 1) || (getVideoTotalVisits(videoVisits) == 0)  ? 'visualizations' : 'visualization'}
-                  - {getUploadDateFormatted(video.uploadDate)} ◷
+                  - {getUploadDateFormatted(video.uploadDate)}
                 </p>
                 {video.description}
               </div>
@@ -783,31 +779,7 @@ export default VideoPage;
 
 Header, RecommendedVideoWrapper, VideoComment, y CommentInput son ejemplos de componentes React utilizados en la página de visualización de video. Cada uno de estos componentes encapsula una funcionalidad específica y se reutiliza en diferentes partes de la aplicación. Los useEffect son hooks de react, que permiten ejecutar acciones de manera reactiva junto a las variables de estado, actuando los useEffect como observadores y los useState (variables de estado del componente) observables, dentro de la programacion reactiva.
 
----
-
-##Arquitectura general del frontend
-Puesto que la complejidad del frontend lejos de residir en los conceptos utilizados lo hace en como se usan, voy a dar una visión general sobre la estructura del proyecto:
-
-El proyecto ReactTube utiliza una arquitectura basada en React y Redux para manejar el estado global y la interacción entre componentes. La aplicación se inicia en [`App.jsx`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/main/App.jsx), donde se configura el store de Redux y se define el enrutador principal de la aplicación.
-
-### Enrutamiento y Navegación
-
-El enrutamiento se gestiona a través de `AppRouter.jsx`, que se encuentra en [`AppRouter.jsx`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/main/AppRouter.jsx). Aquí se definen las rutas para las diferentes páginas y componentes de la aplicación, como la página de inicio, el dashboard, la autenticación, y las páginas de visualización y edición de videos.
-
-### Estado Global y Redux
-
-Para la gestión del estado global, se utiliza Redux. La configuración del store de Redux se realiza en [`configureAppStore.js`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/helpers/configureAppStore.js), donde se definen los reducers y se aplica middleware para tareas como la verificación de sesión. Este store se utiliza para manejar datos como la autenticación del usuario y la información de sesión.
-
-### Componentes y Carga de Datos
-
-Los componentes principales de la aplicación incluyen:
-
-*   **VideoWrapper**: En [`VideoWrapper.jsx`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/VideoWrapper/VideoWrapper.jsx), se maneja la presentación de una lista de videos, utilizando el componente `VideoCard` para cada video.
-*   **VideoCard**: [`VideoCard.jsx`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/VideoCard/VideoCard.jsx) es un componente clave que muestra la información de cada video, como el título, la miniatura y las visitas. Utiliza Redux para acceder al estado global y cargar datos como las miniaturas de los videos.
-*   **Header y Search**: El [`Header`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/Header/Header.jsx) y el componente [`Search`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/Search/Search.jsx) facilitan la navegación y la búsqueda dentro de la aplicación.
-*   **UserInfo y CommentInput**: Componentes como [`UserInfo`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/UserInfo/UserInfo.jsx) y [`CommentInput`](https://github.com/rgpzar/ReactTube/blob/main/ReactTubeFront/src/components/CommentInput/CommentInput.jsx) se utilizan para mostrar información del usuario y permitir la interacción con comentarios en los videos.
-
-### Interacción entre Componentes
+#### Interacción entre Componentes
 
 Los componentes interactúan entre sí principalmente a través del estado global gestionado por Redux y las props. Por ejemplo, `VideoWrapper` recibe una lista de videos y la pasa a `VideoCard`. `VideoCard` a su vez utiliza el estado global para cargar datos adicionales como las miniaturas.
 

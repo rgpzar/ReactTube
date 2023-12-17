@@ -15,7 +15,17 @@ function App() {
         <Provider store={store}>
           <AppRouter/>
         </Provider>
-        <ToastContainer/>
+        <ToastContainer
+            position="bottom-right"
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={false}
+            pauseOnFocusLoss={true}
+            draggable={false}
+            pauseOnHover={false}
+        />
     </>
   )
 }
